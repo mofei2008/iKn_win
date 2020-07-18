@@ -1,0 +1,1439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>爱耕耘商务版接口测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 1.2.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    
+<style type="text/css" media="screen">
+body        { font-family: Microsoft YaHei;padding: 20px; font-size: 100%; }
+table       { font-size: 100%; }
+.table tbody tr td{
+            vertical-align: middle;
+        }
+/* -- heading ---------------------------------------------------------------------- */
+.heading .description, .attribute {
+    clear: both;
+}
+/* --- 失败和错误合集样式 -- Gelomen --- */
+.failCollection, .errorCollection {
+    width: 100px;
+    float: left;
+}
+#failCaseOl li {
+    color: red
+}
+#errorCaseOl li {
+    color: orange
+}
+/* --- 打开截图特效样式 -- Gelomen --- */
+.data-img{
+    cursor:pointer
+}
+.pic_looper{
+    width:100%;
+    height:100%;
+    position: fixed;
+    left: 0;
+    top:0;
+    opacity: 0.6;
+    background: #000;
+    display: none;
+    z-index: 100;
+}
+.pic_show{
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+.pic_box{
+    padding:10px;
+    width:90%;
+    height:90%;
+    margin:40px auto;
+    text-align: center;
+    overflow: hidden;
+}
+.pic_box img{
+    width: auto;
+    height: 100%;
+    -moz-box-shadow: 0px 0px 20px 0px #000;
+    -webkit-box-shadow: 0px 0px 20px 0px #000;
+    box-shadow: 0px 0px 20px 0px #000;
+}
+/* --- 饼状图div样式 -- Gelomen --- */
+#container {
+    width: 450px;
+    height: 300px;
+    float: left;
+}
+/* -- report ------------------------------------------------------------------------ */
+#total_row  { font-weight: bold; }
+.passCase   { color: #5cb85c; }
+.failCase   { color: #d9534f; font-weight: bold; }
+.errorCase  { color: #f0ad4e; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+.screenshot:link { text-decoration: none;color: deeppink; }
+.screenshot:visited { text-decoration: none;color: deeppink; }
+.screenshot:hover { text-decoration: none;color: darkcyan; }
+.screenshot:active { text-decoration: none;color: deeppink; }
+</style>
+
+</head>
+<body >
+<script language="javascript" type="text/javascript">
+    $(function(){
+        // 修改 失败 和 错误 用例里对应按钮的颜色ClassName为动态加载 -- Gelomen
+    	$("button").each(function () {
+    	    var text = $(this).text();
+    	    if(text == "失败"){
+    	        $(this).addClass("btn-danger")
+            }else if(text == "错误") {
+                $(this).addClass("btn-warning")
+            }
+        });
+        // 给失败和错误合集加样式 -- Gelomen
+        var p_attribute = $("p.attribute");
+        p_attribute.eq(4).addClass("failCollection");
+        p_attribute.eq(5).addClass("errorCollection");
+        // 打开截图，放大，点击任何位置可以关闭图片  -- Gelomen
+        $(".screenshot").click(function(){
+            var img = $(this).attr("img");
+            $('.pic_show img').attr('src', img);
+            $('.pic_looper').fadeIn(200);
+            $('.pic_show').fadeIn(200);
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px")
+        });
+        $('.pic_looper, .pic_show').click(function(){
+            $('.pic_looper').fadeOut(200);
+            $('.pic_show').fadeOut(200)
+        });
+        var browserWidth = $(window).width();
+        var margin_left = browserWidth/2 - 450;
+        if(margin_left <= 240){
+            $("#container").css("margin", "auto");
+        }else {
+            $("#container").css("margin-left", margin_left + "px");
+        }
+        $(window).resize(function(){
+            // 改变窗口大小时，自动改变图片与顶部的距离  -- Gelomen
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px");
+            // 改变窗口大小时，自动改变饼图的边距  -- Gelomen
+            var browserWidth = $(window).width();
+            var margin_left = browserWidth/2 - 450;
+            if(margin_left <= 240){
+                $("#container").css("margin", "auto");
+            }else {
+                $("#container").css("margin-left", margin_left + "px");
+            }
+        });
+        // 距离顶部超过浏览器窗口一屏时，回到顶部按钮才出现  -- Gelomen
+        $(window).scroll(function(){
+            var browserHeight = $(window).height();
+            var top = $(window).scrollTop();
+            if(top >= browserHeight){
+                $("#toTop").css("display", "block")
+            }else {
+                $("#toTop").css("display", "none")
+            }
+        })
+        // 增加回到顶部过程的动画，以看上去不会那么生硬  -- Gelomen
+        $("#toTop").click(function() {
+            $("html,body").animate({"scrollTop":0}, 700)
+        })
+        // 增加饼状图  -- Gelomen
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                spacing : [0, 0, 0, 0]
+            },
+            credits: {
+                enabled: false
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: false
+                }
+            },
+            title: {
+                floating:true,
+                text: '测试结果占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    colors: ['#81ca9d', '#f16d7e', '#fdc68c'],
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    point: {
+                        events: {
+                            mouseOver: function(e) {  // 鼠标滑过时动态更新标题
+                                chart.setTitle({
+                                    text: e.target.name+ '\t'+ e.target.y + ' 个'
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '80%',
+                name: '比例',
+                data: [
+                    ['通过', 28],
+                    {
+                        name: '失败',
+                        y: 0,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['错误', 1]
+                ]
+            }]
+        }, function(c) {
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                titleHeight = parseInt(c.title.styles.fontSize);
+            c.setTitle({
+                y:centerY + titleHeight/2
+            });
+            chart = c;
+        });
+        // 查看 失败 和 错误 合集链接文字切换  -- Gelomen
+        $(".showDetail").click(function () {
+            if($(this).html() == "点击查看"){
+                $(this).html("点击收起")
+            }else {
+                $(this).html("点击查看")
+            }
+        })
+    });
+output_list = Array();
+/*level 调整增加只显示通过用例的分类 --Findyou / 修复筛选显示bug --Gelomen
+0:Summary //all hiddenRow
+1:Failed  //pt&et hiddenRow, ft none
+2:Pass    //pt none, ft&et hiddenRow
+3:Error   //pt&ft hiddenRow, et none
+4:All     //all none
+*/
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level == 2 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level == 1 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'et') {
+            if (level == 1 || level == 0 || level == 2) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+    }
+    //加入【详细】切换文字变化 --Findyou
+    detail_class=document.getElementsByClassName('detail');
+	//console.log(detail_class.length)
+	if (level == 3) {
+		for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="收起"
+		}
+	}
+	else{
+			for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="详细"
+		}
+	}
+}
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        //ID修改 点 为 下划线 -Findyou
+        tid0 = 't' + cid.substr(1) + '_' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'e' + tid0;
+                tr = document.getElementById(tid);
+            }
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        //修改点击无法收起的BUG，加入【详细】切换文字变化 --Findyou
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+            document.getElementById(cid).innerText = "详细"
+        }
+        else {
+            document.getElementById(tid).className = '';
+            document.getElementById(cid).innerText = "收起"
+        }
+    }
+}
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+</script>
+<div class='pic_looper'></div> <div class='pic_show'><div class='pic_box'><img src=''/></div> </div>
+<div class='heading'>
+<div style="width: 650px; float: left;">
+    <h1 style="font-family: Microsoft YaHei">爱耕耘商务版接口测试报告</h1>
+    <p class='attribute'><strong>测试人员 : </strong> 李德涛</p>
+<p class='attribute'><strong>开始时间 : </strong> 2020-07-14 19:04:33</p>
+<p class='attribute'><strong>合计耗时 : </strong> 0:00:11.997638</p>
+<p class='attribute'><strong>测试结果 : </strong> 共 29，通过 28，错误 1，通过率 = 96.55%</p>
+<p class='attribute'><strong>失败用例合集 : </strong> <ol style='float: left;'>无</ol></p>
+<p class='attribute'><strong>错误用例合集 : </strong> <div class='panel-default' style='float: left;'><a class='showDetail' data-toggle='collapse' href='#errorCaseOl' style='text-decoration: none;'>点击查看</a></div><ol id='errorCaseOl' class='collapse' style='float: left;'><li>test01_lands_pic (test_02_lands_04_lands_pic.Test_Lands_pic)</li></ol></p>
+
+    <p class='description'>测试详情如下：description</p>
+</div>
+<div id="container"></div>
+</div>
+
+
+<div style="width: 500px; clear: both;">
+<p id='show_detail_line'>
+<a class="btn btn-primary" href='javascript:showCase(0)'>概要{ 96.55% }</a>
+<a class="btn btn-success" href='javascript:showCase(2)'>通过{ 28 }</a>
+<a class="btn btn-danger" href='javascript:showCase(1)'>失败{ 0 }</a>
+<a class="btn btn-warning" href='javascript:showCase(3)'>错误{ 1 }</a>
+<a class="btn btn-info" href='javascript:showCase(4)'>所有{ 29 }</a>
+</p>
+</div>
+<table id='result_table' class="table table-condensed table-bordered table-hover">
+<colgroup>
+<col align='left' style="width: 300px;"/>
+<col align='right' style="width: 300px;"/>
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' style="width: 200px;"/>
+</colgroup>
+<tr id='header_row' class="text-center success" style="font-weight: bold;font-size: 14px;">
+    <td>用例集/测试用例</td>
+    <td>说明</td>
+    <td>总计</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>耗时</td>
+    <td>详细</td>
+</tr>
+
+<tr class='passClass warning'>
+    <td>Test_Login</td>
+    <td>登录功能</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.12秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c1',1)" class="detail" id='c1'>详细</a></td>
+</tr>
+
+    <tr id='pt1_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_1___18610806332____Aa111111____httpCode___200_</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_1'>通过</button>
+        <div id='div_pt1_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_1'>通过</button>
+        <div id='div_pt1_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_1: http://icanapi.aikenong.com.cn/version2.0/login/
+测试开始！
+{'data': {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MH0.hKre7DZiFW12SflxYTa5owYqM40DeezUoXrhAdI7c8Y', 'user_id': 10890, 'mobile': '18610806332', 'comp_flag': '', 'main_var_code': '01', 'is_business': '0'}, 'httpCode': 200}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_UserInfo</td>
+    <td>用户信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.14秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c2',1)" class="detail" id='c2'>详细</a></td>
+</tr>
+
+    <tr id='pt2_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_userinfo</div></td>
+        <td style="vertical-align: middle">用户信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_1'>通过</button>
+        <div id='div_pt2_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_1'>通过</button>
+        <div id='div_pt2_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MH0.hKre7DZiFW12SflxYTa5owYqM40DeezUoXrhAdI7c8Y
+http://icanapi.aikenong.com.cn/version2.0/user/informations/
+&lt;Response [200]&gt;
+{'data': {'mobile': '18610806332', 'id': 10890, 'user_name': '18610806332', 'cert_status': '0', 'avatar': 'static/media/avatar/default_avatar.png', 'username': '18610806332', 'gender': '', 'birthday': '', 'province': '北京市', 'city': '北京市', 'district': '东城区', 'is_boss': '1', 'can_reg': '0', 'user_guide': 'https://icanapi.aikenong.com.cn/version2.0/static/ican_manual/manual.html', 'var_code': '01', 'is_business': '0'}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Company</td>
+    <td>公司信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.12秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c3',1)" class="detail" id='c3'>详细</a></td>
+</tr>
+
+    <tr id='pt3_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_company</div></td>
+        <td style="vertical-align: middle">tips</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_1'>通过</button>
+        <div id='div_pt3_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_1'>通过</button>
+        <div id='div_pt3_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MH0.hKre7DZiFW12SflxYTa5owYqM40DeezUoXrhAdI7c8Y
+http://icanapi.aikenong.com.cn/version2.0/lp/tips/
+&lt;Response [200]&gt;
+{'data': {'lands': 2, 'plans': 1}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Phone_Info</td>
+    <td>手机信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.16秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c4',1)" class="detail" id='c4'>详细</a></td>
+</tr>
+
+    <tr id='pt4_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_phone_info</div></td>
+        <td style="vertical-align: middle">客户排行榜</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MX0.HjEjNHlEr-7GbLp9x_cBJgm1PT7nwhJBctG2qfk2rs8
+http://icanapi.aikenong.com.cn/version2.0/phone/info/
+{'data': {}, 'httpCode': 200, 'message': 'succeed', 'total_page': '', 'count': ''}
+{'Server': 'nginx/1.10.3', 'Date': 'Tue, 14 Jul 2020 11:02:41 GMT', 'Content-Type': 'application/json', 'Content-Length': '73', 'Connection': 'keep-alive', 'Vary': 'Accept', 'Allow': 'POST, OPTIONS', 'X-Frame-Options': 'SAMEORIGIN'}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_ProcessNum</td>
+    <td>客户排行榜</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c5',1)" class="detail" id='c5'>详细</a></td>
+</tr>
+
+    <tr id='pt5_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_processnum</div></td>
+        <td style="vertical-align: middle">客户排行榜</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_1'>通过</button>
+        <div id='div_pt5_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_1'>通过</button>
+        <div id='div_pt5_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MX0.HjEjNHlEr-7GbLp9x_cBJgm1PT7nwhJBctG2qfk2rs8
+http://icanapi.aikenong.com.cn/version2.0/process/num/
+&lt;Response [200]&gt;
+{'data': {'count': 14}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Income</td>
+    <td>销售收入</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.18秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c6',1)" class="detail" id='c6'>详细</a></td>
+</tr>
+
+    <tr id='pt6_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_income</div></td>
+        <td style="vertical-align: middle">销售收入</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_1'>通过</button>
+        <div id='div_pt6_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_1'>通过</button>
+        <div id='div_pt6_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MX0.HjEjNHlEr-7GbLp9x_cBJgm1PT7nwhJBctG2qfk2rs8
+http://icanapi.aikenong.com.cn/version2.0/whole/income/
+&lt;Response [200]&gt;
+{'data': {'crop_profit': [{'varCode': '01', 'varName': '玉米', 'profit': '40.49', 'cost': '0', 'income': '0'}, {'varCode': '02', 'varName': '水稻', 'profit': '0', 'cost': '0', 'income': '0'}, {'varCode': '03', 'varName': '棉花', 'profit': '0', 'cost': '0', 'income': '0'}], 'cur_crop_price': [{'varCode': '01', 'varName': '玉米', 'price': '1850.0'}, {'varCode': '02', 'varName': '水稻', 'price': '2700.0'}, {'varCode': '03', 'varName': '棉花', 'price': '5600.0'}], 'total_profit': '40.49', 'total_cost': '0', 'total_income': '40.49', 'unit': '万元'}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Weather</td>
+    <td>天气预报</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.19秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c7',1)" class="detail" id='c7'>详细</a></td>
+</tr>
+
+    <tr id='pt7_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_weather</div></td>
+        <td style="vertical-align: middle">天气预报</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt7_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt7_1'>通过</button>
+        <div id='div_pt7_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt7_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt7_1'>通过</button>
+        <div id='div_pt7_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt7_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MX0.HjEjNHlEr-7GbLp9x_cBJgm1PT7nwhJBctG2qfk2rs8
+http://icanapi.aikenong.com.cn/version2.0/weather/tips/
+&lt;Response [200]&gt;
+{'data': {'weather15': {'time': '2020-07-14 19:02:41', 'status': 200, 'date': '', 'data': {'forecast': [{'high': '高温 32℃', 'low': '低温 22℃', 'date': '14', 'sunrise': '04:57', 'sunset': '19:42', 'fl': '3级', 'fx': '南风', 'aqi': 42, 'ymd': '2020-07-14', 'week': '星期二', 'type': '晴', 'notice': '', 'shidu': '43.0%'}, {'high': '高温 32℃', 'low': '低温 22℃', 'date': '15', 'sunrise': '04:58', 'sunset': '19:42', 'fl': '3级', 'fx': '西南风', 'aqi': 61, 'ymd': '2020-07-15', 'week': '星期三', 'type': '晴', 'notice': ''}, {'high': '高温 32℃', 'low': '低温 24℃', 'date': '16', 'sunrise': '04:59', 'sunset': '19:41', 'fl': '4级', 'fx': '西南风', 'aqi': 73, 'ymd': '2020-07-16', 'week': '星期四', 'type': '多云', 'notice': ''}, {'high': '高温 30℃', 'low': '低温 22℃', 'date': '17', 'sunrise': '05:00', 'sunset': '19:40', 'fl': '4级', 'fx': '南风', 'aqi': 69, 'ymd': '2020-07-17', 'week': '星期五', 'type': '小雨', 'notice': ''}, {'high': '高温 29℃', 'low': '低温 21℃', 'date': '18', 'sunrise': '05:00', 'sunset': '19:40', 'fl': '3级', 'fx': '东南风', 'aqi': 40, 'ymd': '2020-07-18', 'week': '星期六', 'type': '小雨', 'notice': ''}, {'high': '高温 27℃', 'low': '低温 21℃', 'date': '19', 'sunrise': '05:01', 'sunset': '19:39', 'fl': '3级', 'fx': '东北风', 'aqi': 21, 'ymd': '2020-07-19', 'week': '星期日', 'type': '中雨', 'notice': ''}, {'high': '高温 32℃', 'low': '低温 22℃', 'date': '20', 'sunrise': '05:02', 'sunset': '19:38', 'fl': '3级', 'fx': '西南风', 'aqi': 32, 'ymd': '2020-07-20', 'week': '星期一', 'type': '小雨', 'notice': ''}, {'high': '高温 33℃', 'low': '低温 21℃', 'date': '21', 'sunrise': '05:03', 'sunset': '19:38', 'fl': '2级', 'fx': '南风', 'aqi': 65, 'ymd': '2020-07-21', 'week': '星期二', 'type': '小雨', 'notice': ''}, {'high': '高温 34℃', 'low': '低温 21℃', 'date': '22', 'sunrise': '05:04', 'sunset': '19:37', 'fl': '2级', 'fx': '西南风', 'aqi': 84, 'ymd': '2020-07-22', 'week': '星期三', 'type': '多云', 'notice': ''}, {'high': '高温 36℃', 'low': '低温 22℃', 'date': '23', 'sunrise': '05:05', 'sunset': '19:36', 'fl': '3级', 'fx': '东南风', 'aqi': 74, 'ymd': '2020-07-23', 'week': '星期四', 'type': '中雨', 'notice': ''}, {'high': '高温 38℃', 'low': '低温 22℃', 'date': '24', 'sunrise': '05:05', 'sunset': '19:35', 'fl': '2级', 'fx': '东南风', 'aqi': 49, 'ymd': '2020-07-24', 'week': '星期五', 'type': '小雨', 'notice': ''}, {'high': '高温 36℃', 'low': '低温 22℃', 'date': '25', 'sunrise': '05:06', 'sunset': '19:34', 'fl': '2级', 'fx': '东南风', 'aqi': 68, 'ymd': '2020-07-25', 'week': '星期六', 'type': '小雨', 'notice': ''}, {'high': '高温 32℃', 'low': '低温 20℃', 'date': '26', 'sunrise': '05:07', 'sunset': '19:34', 'fl': '2级', 'fx': '东风', 'aqi': 72, 'ymd': '2020-07-26', 'week': '星期日', 'type': '中雨', 'notice': ''}, {'high': '高温 35℃', 'low': '低温 21℃', 'date': '27', 'sunrise': '05:08', 'sunset': '19:33', 'fl': '2级', 'fx': '东风', 'aqi': 71, 'ymd': '2020-07-27', 'week': '星期一', 'type': '小雨', 'notice': ''}, {'high': '高温 36℃', 'low': '低温 22℃', 'date': '28', 'sunrise': '05:09', 'sunset': '19:32', 'fl': '2级', 'fx': '东南风', 'aqi': 73, 'ymd': '2020-07-28', 'week': '星期二', 'type': '中雨', 'notice': ''}], 'shidu': '43.0%', 'pm10': 40.0, 'pm25': 24.0, 'wendu': 32, 'quality': ''}, 'message': 'success'}, 'warnMsg': ['今日天气良好，适宜农作物生长。'], 'city_info': {'city': '东城区', 'location': [39.928353, 116.416357]}}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_News</td>
+    <td>农业新闻</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c8',1)" class="detail" id='c8'>详细</a></td>
+</tr>
+
+    <tr id='pt8_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_news</div></td>
+        <td style="vertical-align: middle">农业新闻</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt8_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt8_1'>通过</button>
+        <div id='div_pt8_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt8_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt8_1'>通过</button>
+        <div id='div_pt8_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt8_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MX0.HjEjNHlEr-7GbLp9x_cBJgm1PT7nwhJBctG2qfk2rs8
+http://icanapi.aikenong.com.cn/version2.0/news/
+&lt;Response [200]&gt;
+{'data': [{'pk': 415, 'title': '7月玉米钻心虫危害来袭！如何防治才能达到好的效果？', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/16598f6e-c57c-11ea-a640-fa163e5c3d8d.jpg', 'summary': '北方春玉米也将陆续进入拔节期，是玉米螟防治关键时期。', 'pub_time': '2020-07-14 10:46:56', 'pub_status': '1', 'view_num': 135, 'thumb_pic2': 'static/media/news/thumb/1659a904-c57c-11ea-a640-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/415.html?pk=415'}, {'pk': 414, 'title': '高温多雨天打杀虫药，这2点很关键！', 'author': '于小乐', 'act_tags': '2001', 'content_tags': [], 'thumb_pic': 'static/media/news/thumb/3dca351e-c4b2-11ea-9115-fa163e5c3d8d.jpg', 'summary': '高温多雨容易造成病虫草害严重高发，还会影响农药的药效发挥。', 'pub_time': '2020-07-13 10:41:44', 'pub_status': '1', 'view_num': 75, 'thumb_pic2': 'static/media/news/thumb/3dca78d0-c4b2-11ea-9115-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/414.html?pk=414'}, {'pk': 413, 'title': '测土配肥为什么效果不明显？需要考虑这些因素！', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1006'], 'thumb_pic': 'static/media/news/thumb/21baa9f0-c1d1-11ea-a236-fa163e5c3d8d.jpg', 'summary': '测土配肥没有科学施肥指导方案，就失去了测土的目的和意义。', 'pub_time': '2020-07-10 15:03:46', 'pub_status': '1', 'view_num': 130, 'thumb_pic2': 'static/media/news/thumb/21badeb6-c1d1-11ea-a236-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/413.html?pk=413'}, {'pk': 412, 'title': '今年雨水较多，一定要及早防治玉米顶腐病！', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/72bee0c8-c1ae-11ea-aa29-fa163e5c3d8d.jpg', 'summary': '玉米顶腐病是玉米顶端腐烂病的总称，是玉米在生长的过程中算是比较常见的一种病害', 'pub_time': '2020-07-09 14:38:32', 'pub_status': '1', 'view_num': 479, 'thumb_pic2': 'static/media/news/thumb/72bee9ba-c1ae-11ea-aa29-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/412.html?pk=412'}, {'pk': 411, 'title': '棉花打顶前后的水肥管理，直接决定了今年棉花是高产还是低产', 'author': '于小乐', 'act_tags': '2001', 'content_tags': [], 'thumb_pic': 'static/media/news/thumb/0940ee10-c196-11ea-a288-fa163e5c3d8d.jpg', 'summary': '人工、药物打顶、水肥管理注意事项', 'pub_time': '2020-07-09 11:44:26', 'pub_status': '1', 'view_num': 45, 'thumb_pic2': 'static/media/news/thumb/0940f400-c196-11ea-a288-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/411.html?pk=411'}, {'pk': 400, 'title': '【夏玉米】二点委夜蛾来了！从开始为害到造成大量死苗只有4-5天，怎么防治？', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/5b392b32-c0de-11ea-91c0-fa163e5c3d8d.jpg', 'summary': '二点委夜蛾已经成为黄淮海夏玉米区的常发性害虫。', 'pub_time': '2020-07-08 13:46:29', 'pub_status': '1', 'view_num': 58, 'thumb_pic2': 'static/media/news/thumb/5b3933c0-c0de-11ea-91c0-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/400.html?pk=400'}], 'httpCode': 200, 'message': '', 'total_page': 43, 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Times</td>
+    <td>日期</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.5秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c9',1)" class="detail" id='c9'>详细</a></td>
+</tr>
+
+    <tr id='pt9_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_times</div></td>
+        <td style="vertical-align: middle">日期</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt9_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt9_1'>通过</button>
+        <div id='div_pt9_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt9_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt9_1'>通过</button>
+        <div id='div_pt9_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt9_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2MX0.HjEjNHlEr-7GbLp9x_cBJgm1PT7nwhJBctG2qfk2rs8
+http://icanapi.aikenong.com.cn/version2.0/times/
+&lt;Response [200]&gt;
+{'data': {'land_data': {'land_id': 38399, 'land_name': '五常001', 'points': [[127.18412, 44.953129], [127.181655, 44.950705], [127.184478, 44.94733], [127.188783, 44.950066]], 'addressCounty': '五常市', 'addressCity': '哈尔滨市', 'status': '3', 'crop': '玉米', 'mu': '270.4', 'stage': '未播种'}, 'count_down_hours': 28, 'weacher_pic_url': 'static/weathers/qing.png', 'jq_pic_url': '', 'weather': {'high': '高温 32℃', 'low': '低温 22℃', 'date': '14', 'sunrise': '04:57', 'sunset': '19:42', 'fl': '3级', 'fx': '南风', 'aqi': 42, 'ymd': '2020-07-14', 'week': '星期二', 'type': '晴', 'notice': '', 'shidu': '43.0%'}, 'weather15': {'time': '2020-07-14 19:02:42', 'status': 200, 'date': '', 'data': {'forecast': [{'high': '高温 32℃', 'low': '低温 22℃', 'date': '14', 'sunrise': '04:57', 'sunset': '19:42', 'fl': '3级', 'fx': '南风', 'aqi': 42, 'ymd': '2020-07-14', 'week': '星期二', 'type': '晴', 'notice': '', 'shidu': '43.0%'}, {'high': '高温 32℃', 'low': '低温 22℃', 'date': '15', 'sunrise': '04:58', 'sunset': '19:42', 'fl': '3级', 'fx': '西南风', 'aqi': 61, 'ymd': '2020-07-15', 'week': '星期三', 'type': '晴', 'notice': ''}, {'high': '高温 32℃', 'low': '低温 24℃', 'date': '16', 'sunrise': '04:59', 'sunset': '19:41', 'fl': '4级', 'fx': '西南风', 'aqi': 73, 'ymd': '2020-07-16', 'week': '星期四', 'type': '多云', 'notice': ''}, {'high': '高温 30℃', 'low': '低温 22℃', 'date': '17', 'sunrise': '05:00', 'sunset': '19:40', 'fl': '4级', 'fx': '南风', 'aqi': 69, 'ymd': '2020-07-17', 'week': '星期五', 'type': '小雨', 'notice': ''}, {'high': '高温 29℃', 'low': '低温 21℃', 'date': '18', 'sunrise': '05:00', 'sunset': '19:40', 'fl': '3级', 'fx': '东南风', 'aqi': 40, 'ymd': '2020-07-18', 'week': '星期六', 'type': '小雨', 'notice': ''}, {'high': '高温 27℃', 'low': '低温 21℃', 'date': '19', 'sunrise': '05:01', 'sunset': '19:39', 'fl': '3级', 'fx': '东北风', 'aqi': 21, 'ymd': '2020-07-19', 'week': '星期日', 'type': '中雨', 'notice': ''}, {'high': '高温 32℃', 'low': '低温 22℃', 'date': '20', 'sunrise': '05:02', 'sunset': '19:38', 'fl': '3级', 'fx': '西南风', 'aqi': 32, 'ymd': '2020-07-20', 'week': '星期一', 'type': '小雨', 'notice': ''}, {'high': '高温 33℃', 'low': '低温 21℃', 'date': '21', 'sunrise': '05:03', 'sunset': '19:38', 'fl': '2级', 'fx': '南风', 'aqi': 65, 'ymd': '2020-07-21', 'week': '星期二', 'type': '小雨', 'notice': ''}, {'high': '高温 34℃', 'low': '低温 21℃', 'date': '22', 'sunrise': '05:04', 'sunset': '19:37', 'fl': '2级', 'fx': '西南风', 'aqi': 84, 'ymd': '2020-07-22', 'week': '星期三', 'type': '多云', 'notice': ''}, {'high': '高温 36℃', 'low': '低温 22℃', 'date': '23', 'sunrise': '05:05', 'sunset': '19:36', 'fl': '3级', 'fx': '东南风', 'aqi': 74, 'ymd': '2020-07-23', 'week': '星期四', 'type': '中雨', 'notice': ''}, {'high': '高温 38℃', 'low': '低温 22℃', 'date': '24', 'sunrise': '05:05', 'sunset': '19:35', 'fl': '2级', 'fx': '东南风', 'aqi': 49, 'ymd': '2020-07-24', 'week': '星期五', 'type': '小雨', 'notice': ''}, {'high': '高温 36℃', 'low': '低温 22℃', 'date': '25', 'sunrise': '05:06', 'sunset': '19:34', 'fl': '2级', 'fx': '东南风', 'aqi': 68, 'ymd': '2020-07-25', 'week': '星期六', 'type': '小雨', 'notice': ''}, {'high': '高温 32℃', 'low': '低温 20℃', 'date': '26', 'sunrise': '05:07', 'sunset': '19:34', 'fl': '2级', 'fx': '东风', 'aqi': 72, 'ymd': '2020-07-26', 'week': '星期日', 'type': '中雨', 'notice': ''}, {'high': '高温 35℃', 'low': '低温 21℃', 'date': '27', 'sunrise': '05:08', 'sunset': '19:33', 'fl': '2级', 'fx': '东风', 'aqi': 71, 'ymd': '2020-07-27', 'week': '星期一', 'type': '小雨', 'notice': ''}, {'high': '高温 36℃', 'low': '低温 22℃', 'date': '28', 'sunrise': '05:09', 'sunset': '19:32', 'fl': '2级', 'fx': '东南风', 'aqi': 73, 'ymd': '2020-07-28', 'week': '星期二', 'type': '中雨', 'notice': ''}], 'shidu': '43.0%', 'pm10': 40.0, 'pm25': 24.0, 'wendu': 32, 'quality': ''}, 'message': 'success', 'cityInfo': {'city': '东城区', 'location': [39.928353, 116.416357]}}, 'city_info': {'city': '东城区', 'location': [39.928353, 116.416357]}, 'warnName': '', 'warning_url': 'static/761604388043199407.png/', 'warn_msg': '', 'sum_mu': '275', 'count_land': '2'}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Banner</td>
+    <td>Banner</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c10',1)" class="detail" id='c10'>详细</a></td>
+</tr>
+
+    <tr id='pt10_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_banner</div></td>
+        <td style="vertical-align: middle">Banner</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt10_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt10_1'>通过</button>
+        <div id='div_pt10_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt10_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt10_1'>通过</button>
+        <div id='div_pt10_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt10_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2Mn0.qkUp5W4boaKvlBDuVWO24rVVNKrMt5CM3ymK5TEATZ4
+http://icanapi.aikenong.com.cn/version2.0/banners/
+&lt;Response [200]&gt;
+{'data': [{'banner_id': 13, 'h5_path': 'http://icanapi.aikenong.com.cn/version2.0/static/appnews/news2.html?pk=13', 'pic_url': 'static/media/banners/aaad8cac-df94-11e9-94c6-fa163e5c3d8d.png', 'title': '施肥方案大pk', 'is_h5': '1'}, {'banner_id': 12, 'h5_path': 'http://icanapi.aikenong.com.cn/version2.0/static/appnews/news2.html?pk=12', 'pic_url': 'static/media/banners/5ffab392-df94-11e9-94c6-fa163e5c3d8d.png', 'title': '农场规划', 'is_h5': '1'}, {'banner_id': 14, 'h5_path': 'http://icanapi.aikenong.com.cn/version2.0/static/appnews/news2.html?pk=14', 'pic_url': 'static/media/banners/d4fbae36-f17c-11e9-be46-fa163e5c3d8d.png', 'title': '产量上报', 'is_h5': '0'}], 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Registration</td>
+    <td>经销商</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c11',1)" class="detail" id='c11'>详细</a></td>
+</tr>
+
+    <tr id='pt11_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_registration</div></td>
+        <td style="vertical-align: middle">经销商</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt11_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt11_1'>通过</button>
+        <div id='div_pt11_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt11_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt11_1'>通过</button>
+        <div id='div_pt11_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt11_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2Mn0.qkUp5W4boaKvlBDuVWO24rVVNKrMt5CM3ymK5TEATZ4
+http://icanapi.aikenong.com.cn/version2.0/high/quality/distributor/?latitude=39.897522&amp;longitude=116.491346
+&lt;Response [200]&gt;
+{'data': {}, 'httpCode': 404, 'message': '暂无经销商', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Push</td>
+    <td>注册接口开放</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.91秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c12',1)" class="detail" id='c12'>详细</a></td>
+</tr>
+
+    <tr id='pt12_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_push</div></td>
+        <td style="vertical-align: middle">注册接口开放</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt12_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt12_1'>通过</button>
+        <div id='div_pt12_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt12_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt12_1'>通过</button>
+        <div id='div_pt12_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt12_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2Mn0.qkUp5W4boaKvlBDuVWO24rVVNKrMt5CM3ymK5TEATZ4
+http://icanapi.aikenong.com.cn/version2.0/push/list/?size=1&amp;page=1
+&lt;Response [200]&gt;
+{'data': {}, 'httpCode': 400, 'message': '当前无推送', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Registration</td>
+    <td>注册接口开放</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.12秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c13',1)" class="detail" id='c13'>详细</a></td>
+</tr>
+
+    <tr id='pt13_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_registration</div></td>
+        <td style="vertical-align: middle">注册接口开放</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt13_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt13_1'>通过</button>
+        <div id='div_pt13_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt13_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt13_1'>通过</button>
+        <div id='div_pt13_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt13_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2M30.hauiC2wFPC9QEIoIR49mWE0UCx9jeowLqB7kbr8ncmA
+http://icanapi.aikenong.com.cn/version2.0/registration/
+&lt;Response [200]&gt;
+{'data': '1', 'httpCode': 200, 'message': '开放注册', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Risks</td>
+    <td>农害种类</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.18秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c14',1)" class="detail" id='c14'>详细</a></td>
+</tr>
+
+    <tr id='pt14_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_risks</div></td>
+        <td style="vertical-align: middle">农害种类</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt14_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt14_1'>通过</button>
+        <div id='div_pt14_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt14_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt14_1'>通过</button>
+        <div id='div_pt14_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt14_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2M30.hauiC2wFPC9QEIoIR49mWE0UCx9jeowLqB7kbr8ncmA
+http://icanapi.aikenong.com.cn/version2.0/risks/01/
+&lt;Response [200]&gt;
+{'data': {'zh': [[{'serv_code': 'WEATHER_DISASTER', 'ican_name': '涝害', 'ican_code': 'flooding', 'rate': '38', 'sort_rate': 38.0}, {'serv_code': 'WEATHER_DISASTER', 'ican_name': '早霜', 'ican_code': 'earlyFrost', 'rate': '5', 'sort_rate': 5.0}, {'serv_code': 'WEATHER_DISASTER', 'ican_name': '高温', 'ican_code': 'highTemp', 'rate': '5', 'sort_rate': 5.0}], [{'serv_code': 'BING_DISASTER', 'ican_name': '瘤黑粉病', 'ican_code': 'YM_BING01', 'rate': '66', 'sort_rate': 66.0}, {'serv_code': 'BING_DISASTER', 'ican_name': '丝黑穗病', 'ican_code': 'YM_BING03', 'rate': '57', 'sort_rate': 57.0}, {'serv_code': 'BING_DISASTER', 'ican_name': '茎腐病', 'ican_code': 'YM_BING07', 'rate': '28', 'sort_rate': 28.0}, {'serv_code': 'BING_DISASTER', 'ican_name': '大斑病', 'ican_code': 'YM_BING05', 'rate': '19', 'sort_rate': 19.0}], [{'serv_code': 'CHONG_DISASTER', 'ican_name': '粘虫', 'ican_code': 'YM_CHONG09', 'rate': '38', 'sort_rate': 38.0}, {'serv_code': 'CHONG_DISASTER', 'ican_name': '蚜虫', 'ican_code': 'YM_CHONG03', 'rate': '19', 'sort_rate': 19.0}]], 'reduce_rate': '5.00', 'land_list': [{'land_id': 38399, 'land_name': '五常001', 'qx': {'rate': '38', 'ican_code': 'flooding', 'ican_name': '涝害'}, 'bh': {'rate': '66', 'ican_code': 'YM_BING01', 'ican_name': '瘤黑粉病'}, 'ch': {'rate': '38', 'ican_code': 'YM_CHONG09', 'ican_name': '粘虫'}, 'crop_name': '迪卡J6518', 'reduce_rate': '5.00', 'reduce_rate_sort': 0.05, 'planting_date': '2020-04-27'}]}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Android_info</td>
+    <td>注册接口开放</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.12秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c15',1)" class="detail" id='c15'>详细</a></td>
+</tr>
+
+    <tr id='pt15_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_android_info</div></td>
+        <td style="vertical-align: middle">注册接口开放</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt15_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt15_1'>通过</button>
+        <div id='div_pt15_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt15_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt15_1'>通过</button>
+        <div id='div_pt15_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt15_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2M30.hauiC2wFPC9QEIoIR49mWE0UCx9jeowLqB7kbr8ncmA
+http://icanapi.aikenong.com.cn/version2.0/version/info/?system=android&amp;vc=20200613
+&lt;Response [200]&gt;
+{'data': {}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Visit_time</td>
+    <td>注册接口开放</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.36秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c16',1)" class="detail" id='c16'>详细</a></td>
+</tr>
+
+    <tr id='pt16_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_visit_time</div></td>
+        <td style="vertical-align: middle">注册接口开放</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt16_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt16_1'>通过</button>
+        <div id='div_pt16_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt16_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt16_1'>通过</button>
+        <div id='div_pt16_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt16_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2NH0.pBridUwB-0PvCxqRxWEpy5bPN1k5a2B3YUa4ToZzpZA
+http://icanapi.aikenong.com.cn/version2.0/app/log/
+&lt;Response [201]&gt;
+{'data': {}, 'httpCode': 201, 'message': 'ok', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Tasks</td>
+    <td>注册接口开放</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.14秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c17',1)" class="detail" id='c17'>详细</a></td>
+</tr>
+
+    <tr id='pt17_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_tasks</div></td>
+        <td style="vertical-align: middle">注册接口开放</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt17_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt17_1'>通过</button>
+        <div id='div_pt17_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt17_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt17_1'>通过</button>
+        <div id='div_pt17_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt17_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2NH0.pBridUwB-0PvCxqRxWEpy5bPN1k5a2B3YUa4ToZzpZA
+http://icanapi.aikenong.com.cn/version2.0/tasks/
+&lt;Response [200]&gt;
+{'data': [], 'httpCode': 404, 'message': '无任务', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Daily_price</td>
+    <td>每日粮价</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c18',1)" class="detail" id='c18'>详细</a></td>
+</tr>
+
+    <tr id='pt18_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_daily_price</div></td>
+        <td style="vertical-align: middle">每日粮价</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt18_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt18_1'>通过</button>
+        <div id='div_pt18_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt18_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt18_1'>通过</button>
+        <div id='div_pt18_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt18_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2NH0.pBridUwB-0PvCxqRxWEpy5bPN1k5a2B3YUa4ToZzpZA
+http://icanapi.aikenong.com.cn/version2.0/news/?size=15&amp;content_tag=1005&amp;page=1&amp;title=
+&lt;Response [200]&gt;
+{'data': [{'pk': 312, 'title': '7月13日大豆、玉米、水稻、小麦行情简析', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1005', '1004'], 'thumb_pic': 'static/media/news/thumb/ca383868-6277-11ea-b5ac-fa163e5c3d8d.jpg', 'summary': '点击查看详情', 'pub_time': '2020-03-10 10:35:31', 'pub_status': '1', 'view_num': 1238, 'thumb_pic2': 'static/media/news/thumb/ca384272-6277-11ea-b5ac-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/312.html?pk=312'}, {'pk': 311, 'title': '2020年6月4日国内玉米价格汇总', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1005', '1004', '1001'], 'thumb_pic': 'static/media/news/thumb/c16833ae-61d3-11ea-a46d-fa163e5c3d8d.jpg', 'summary': '点击查看详情', 'pub_time': '2020-03-09 15:01:21', 'pub_status': '1', 'view_num': 389, 'thumb_pic2': 'static/media/news/thumb/c1683a02-61d3-11ea-a46d-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/311.html?pk=311'}, {'pk': 289, 'title': '玉米行情周盘点：供需结构性调整 区域行情走势凸显', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1005'], 'thumb_pic': 'static/media/news/thumb/8329d1d0-5a97-11ea-9544-fa163e5c3d8d.jpg', 'summary': '华北主产区挂牌价格下跌显著；东北地区玉米价格相对坚挺。', 'pub_time': '2020-02-29 10:02:23', 'pub_status': '1', 'view_num': 96, 'thumb_pic2': 'static/media/news/thumb/8329d8b0-5a97-11ea-9544-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/289.html?pk=289'}, {'pk': 274, 'title': '【有价无市】疫情之下“玉米”虚高行情或逆转', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001', '1005'], 'thumb_pic': 'static/media/news/thumb/cf5b546a-4a3f-11ea-a5f9-fa163e5c3d8d.jpg', 'summary': '本周春节假期复工之后，市场报价大幅调涨。', 'pub_time': '2020-02-08 14:55:20', 'pub_status': '1', 'view_num': 173, 'thumb_pic2': 'static/media/news/thumb/cf5b5b68-4a3f-11ea-a5f9-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/274.html?pk=274'}, {'pk': 263, 'title': '【疫情影响】2020年玉米、小麦和棉花价格行情怎么样？', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001', '1005'], 'thumb_pic': 'static/media/news/thumb/ad12ba1e-4301-11ea-933a-fa163e5c3d8d.jpg', 'summary': '元宵节前后，下游饲料企业将开始补货，如果出现供不足需，玉米价格将会有一个小幅上涨的阶段。', 'pub_time': '2020-01-30 09:41:54', 'pub_status': '1', 'view_num': 355, 'thumb_pic2': 'static/media/news/thumb/ad12c0ae-4301-11ea-933a-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/263.html?pk=263'}, {'pk': 249, 'title': '农业农村部发布：猪肉、玉米、大豆、水稻、小麦行情趋势', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1005'], 'thumb_pic': 'static/media/news/thumb/c7e3a446-3782-11ea-866f-fa163e5c3d8d.jpg', 'summary': '“一稳、一涨、一波动” 农业农村部介绍2019年重点农产品市场运行情况', 'pub_time': '2020-01-16 10:21:29', 'pub_status': '1', 'view_num': 174, 'thumb_pic2': 'static/media/news/thumb/c7e3aa90-3782-11ea-866f-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/249.html?pk=249'}, {'pk': 227, 'title': '国际市场风云变幻 国内玉米价格安好', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001', '1005'], 'thumb_pic': 'static/media/news/thumb/d9cb83f2-30f4-11ea-8f66-fa163e5c3d8d.jpg', 'summary': '东北产区、华北产区、玉米行情走势', 'pub_time': '2020-01-07 10:24:59', 'pub_status': '1', 'view_num': 104, 'thumb_pic2': 'static/media/news/thumb/d9cb8d0c-30f4-11ea-8f66-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/227.html?pk=227'}, {'pk': 202, 'title': '年终盘点丨2019玉米行业热点事件', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001', '1005'], 'thumb_pic': 'static/media/news/thumb/e9b7bc12-27e0-11ea-9638-fa163e5c3d8d.jpg', 'summary': '2019年，对玉米行业注定是不平凡的一年', 'pub_time': '2019-12-26 21:11:30', 'pub_status': '1', 'view_num': 119, 'thumb_pic2': 'static/media/news/thumb/e9b7c3a6-27e0-11ea-9638-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/202.html?pk=202'}, {'pk': 184, 'title': '我国化肥农药利用率最新数据公布，说说数字背后的事', 'author': '于小乐', 'act_tags': '2002', 'content_tags': ['1005', '1006'], 'thumb_pic': 'static/media/news/thumb/bb197e72-2236-11ea-b615-fa163e5c3d8d.jpg', 'summary': '省药省肥，能让咱们种植户每亩多挣几十块，你说关系大不大？', 'pub_time': '2019-12-19 16:16:40', 'pub_status': '1', 'view_num': 484, 'thumb_pic2': '', 'h5_path': 'http://media.aikenong.com.cn/static/news/184.html?pk=184'}, {'pk': 151, 'title': '【重要消息】新疆秋粮收购信息', 'author': '于小乐', 'act_tags': '2002', 'content_tags': ['1004', '1005'], 'thumb_pic': 'static/media/news/thumb/56cac598-1ca5-11ea-b381-fa163e5c3d8d.jpg', 'summary': '截至12月6日，全区入统各类企业共收购玉米16.98万吨，累计收购玉米383.39万吨,较去年同期增加170.52万吨', 'pub_time': '2019-12-12 13:39:00', 'pub_status': '1', 'view_num': 70, 'thumb_pic2': 'static/media/news/thumb/56cacb7e-1ca5-11ea-b381-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/151.html?pk=151'}, {'pk': 130, 'title': '雪来了 量上了 玉米卖还是不卖？', 'author': '于小乐', 'act_tags': '2002', 'content_tags': ['1005'], 'thumb_pic': 'static/media/news/thumb/dd0ab7d2-1654-11ea-944c-fa163e5c3d8d.jpg', 'summary': '到底卖不卖？企业谨慎，中间商谨慎，农户犹豫...', 'pub_time': '2019-12-04 13:39:00', 'pub_status': '1', 'view_num': 10, 'thumb_pic2': 'static/media/news/thumb/dd0abdc2-1654-11ea-944c-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/130.html?pk=130'}, {'pk': 134, 'title': '2019年12月4日新疆粮食价格信息', 'author': '于小乐', 'act_tags': '2002', 'content_tags': ['1005', '1004'], 'thumb_pic': 'static/media/news/thumb/0269584e-1664-11ea-944c-fa163e5c3d8d.jpg', 'summary': '2019年12月4日新疆粮食价格信息', 'pub_time': '2019-12-04 13:39:00', 'pub_status': '1', 'view_num': 66, 'thumb_pic2': 'static/media/news/thumb/02695dd0-1664-11ea-944c-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/134.html?pk=134'}, {'pk': 91, 'title': '爱科农独家视角｜中美贸易对抗下的中国农业未来', 'author': '苏蓝冰', 'act_tags': '2003', 'content_tags': ['1005', '1006'], 'thumb_pic': 'static/media/news/thumb/666c59fe-fec2-11e9-9de3-fa163e5c3d8d.png', 'summary': '美国农业部8月10日发布月度供需报告称，美国大豆产量和玉米单产均创下历史新高，但在中美贸易战的影响之下，期货市场随之应声下跌。多收了三五斗的美国农场主，额头皱纹又多了三分。', 'pub_time': '2019-09-13 13:39:00', 'pub_status': '1', 'view_num': 46, 'thumb_pic2': 'static/media/news/thumb/3de05582-d8eb-11e9-8d30-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/91.html?pk=91'}, {'pk': 107, 'title': '今年你家玉米管理的怎样？看看这 10 个误区，有没有中过招？', 'author': '苏蓝冰', 'act_tags': '2003', 'content_tags': ['1001', '1005', '1006'], 'thumb_pic': 'static/media/news/thumb/484629e0-d56a-11e9-95d3-fa163e5c3d8d.png', 'summary': '今年你家玉米管理的怎样？看看这 10 个误区，有没有中过招？', 'pub_time': '2019-09-13 13:38:00', 'pub_status': '1', 'view_num': 35, 'thumb_pic2': 'static/media/news/thumb/48463ad4-d56a-11e9-95d3-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/107.html?pk=107'}, {'pk': 111, 'title': '农业与互联网联姻，谁是这场产业交融的媒人', 'author': '苏蓝冰', 'act_tags': '2003', 'content_tags': ['1005', '1006'], 'thumb_pic': 'static/media/news/thumb/176c95d4-fec3-11e9-af25-fa163e5c3d8d.png', 'summary': '互联网带来的主体和技术升级以及产业的跨界融合、资源高效整合和新型业态是促进农业创新发展的内在机制。', 'pub_time': '2019-09-13 13:38:00', 'pub_status': '1', 'view_num': 68, 'thumb_pic2': 'static/media/news/thumb/27fb82fe-d572-11e9-bc7b-fa163e5c3d8d.png', 'h5_path': 'http://media.aikenong.com.cn/static/news/111.html?pk=111'}], 'httpCode': 200, 'message': '', 'total_page': 3, 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Registration</td>
+    <td>病虫害列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.16秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c19',1)" class="detail" id='c19'>详细</a></td>
+</tr>
+
+    <tr id='pt19_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_registration</div></td>
+        <td style="vertical-align: middle">病虫害列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt19_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt19_1'>通过</button>
+        <div id='div_pt19_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt19_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt19_1'>通过</button>
+        <div id='div_pt19_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt19_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2NH0.pBridUwB-0PvCxqRxWEpy5bPN1k5a2B3YUa4ToZzpZA
+http://icanapi.aikenong.com.cn/version2.0/crops/pests/
+&lt;Response [200]&gt;
+{'data': [{'is_colorful': '1', 'gray_pic': 'static/crop_pic/gray_yumi.png', 'colorful_pic': 'static/crop_pic/real_yumi.png', 'varCode': '01', 'varName': '玉米', 'pests': [{'id': 1, 'icanCode': 'YM_BING01', 'icanName': '瘤黑粉病', 'thumbPicUrl': 'static/pest/thumb/lhfb.png', 'varCode': '01'}, {'id': 2, 'icanCode': 'YM_BING02', 'icanName': '顶腐病', 'thumbPicUrl': 'static/pest/thumb/dfb.png', 'varCode': '01'}, {'id': 3, 'icanCode': 'YM_BING03', 'icanName': '丝黑穗病', 'thumbPicUrl': 'static/pest/thumb/shhb.png', 'varCode': '01'}, {'id': 4, 'icanCode': 'YM_BING04', 'icanName': '锈病', 'thumbPicUrl': 'static/pest/thumb/xb.png', 'varCode': '01'}, {'id': 5, 'icanCode': 'YM_CHONG01', 'icanName': '地老虎', 'thumbPicUrl': 'static/pest/thumb/dlh.png', 'varCode': '01'}, {'id': 6, 'icanCode': 'YM_CHONG02', 'icanName': '红蜘蛛', 'thumbPicUrl': 'static/pest/thumb/hzz.png', 'varCode': '01'}, {'id': 7, 'icanCode': 'YM_CHONG03', 'icanName': '玉米蚜', 'thumbPicUrl': 'static/pest/thumb/yc.png', 'varCode': '01'}, {'id': 8, 'icanCode': 'YM_CHONG04', 'icanName': '三点斑叶蝉', 'thumbPicUrl': 'static/pest/thumb/sdbyc.png', 'varCode': '01'}, {'id': 9, 'icanCode': 'YM_CHONG05', 'icanName': '双斑萤叶甲', 'thumbPicUrl': 'static/pest/thumb/sbyyj.png', 'varCode': '01'}, {'id': 10, 'icanCode': 'YM_CHONG06', 'icanName': '玉米螟', 'thumbPicUrl': 'static/pest/thumb/ymm.png', 'varCode': '01'}, {'id': 13, 'icanCode': 'YM_CHONG07', 'icanName': '金针虫', 'thumbPicUrl': 'static/pest/thumb/jzc.png', 'varCode': '01'}, {'id': 14, 'icanCode': 'YM_CHONG08', 'icanName': '蛴螬', 'thumbPicUrl': 'static/pest/thumb/qc.png', 'varCode': '01'}, {'id': 15, 'icanCode': 'YM_CHONG09', 'icanName': '粘虫', 'thumbPicUrl': 'static/pest/thumb/nc.png', 'varCode': '01'}, {'id': 17, 'icanCode': 'YM_BING05', 'icanName': '大斑病', 'thumbPicUrl': 'static/pest/thumb/dbb.png', 'varCode': '01'}, {'id': 18, 'icanCode': 'YM_BING06', 'icanName': '灰斑病', 'thumbPicUrl': 'static/pest/thumb/hbb.png', 'varCode': '01'}, {'id': 19, 'icanCode': 'YM_BING07', 'icanName': '茎腐病', 'thumbPicUrl': 'static/pest/thumb/jfb.png', 'varCode': '01'}, {'id': 20, 'icanCode': 'YM_BING08', 'icanName': '穗腐病', 'thumbPicUrl': 'static/pest/thumb/sfb.png', 'varCode': '01'}, {'id': 21, 'icanCode': 'YM_BING09', 'icanName': '矮化病', 'thumbPicUrl': 'static/pest/thumb/ahb.png', 'varCode': '01'}, {'id': 22, 'icanCode': 'YM_BING010', 'icanName': '粗缩病', 'thumbPicUrl': 'static/pest/thumb/csb.png', 'varCode': '01'}, {'id': 23, 'icanCode': 'YM_BING011', 'icanName': '苗枯病', 'thumbPicUrl': 'static/pest/thumb/mkb.png', 'varCode': '01'}, {'id': 24, 'icanCode': 'YM_BING012', 'icanName': '纹枯病', 'thumbPicUrl': 'static/pest/thumb/wkb.png', 'varCode': '01'}, {'id': 25, 'icanCode': 'YM_CHONG10', 'icanName': '蓟马', 'thumbPicUrl': 'static/pest/thumb/jm.png', 'varCode': '01'}, {'id': 26, 'icanCode': 'YM_CHONG11', 'icanName': '灰飞虱', 'thumbPicUrl': 'static/pest/thumb/hfs.png', 'varCode': '01'}, {'id': 27, 'icanCode': 'YM_BING013', 'icanName': '小斑病', 'thumbPicUrl': 'static/pest/thumb/xbb.png', 'varCode': '01'}, {'id': 28, 'icanCode': 'YM_BING014', 'icanName': '叶斑病', 'thumbPicUrl': 'static/pest/thumb/ybb.png', 'varCode': '01'}, {'id': 29, 'icanCode': 'YM_CHONG12', 'icanName': '棉铃虫', 'thumbPicUrl': 'static/pest/thumb/mlc.png', 'varCode': '01'}, {'id': 40, 'icanCode': 'YM_BING015', 'icanName': '疯顶病', 'thumbPicUrl': 'static/pest/thumb/ymfdb.png', 'varCode': '01'}, {'id': 41, 'icanCode': 'YM_BING016', 'icanName': '霜霉病', 'thumbPicUrl': 'static/pest/thumb/ymsmb.png', 'varCode': '01'}, {'id': 42, 'icanCode': 'YM_CHONG13', 'icanName': '草地贪夜蛾', 'thumbPicUrl': 'static/pest/thumb/cdtye.png', 'varCode': '01'}, {'id': 43, 'icanCode': 'YM_CHONG14', 'icanName': '蝼蛄', 'thumbPicUrl': 'static/pest/thumb/lg.png', 'varCode': '01'}, {'id': 44, 'icanCode': 'YM_BING017', 'icanName': '弯孢菌叶斑病', 'thumbPicUrl': 'static/pest/thumb/wbjybb.png', 'varCode': '01'}, {'id': 84, 'icanCode': 'YM_BING018', 'icanName': '北方炭疽病', 'thumbPicUrl': 'static/pest/thumb/bftjb.png', 'varCode': '01'}], 'bing': [{'id': 1, 'icanCode': 'YM_BING01', 'icanName': '瘤黑粉病', 'thumbPicUrl': 'static/pest/thumb/lhfb.png', 'varCode': '01'}, {'id': 2, 'icanCode': 'YM_BING02', 'icanName': '顶腐病', 'thumbPicUrl': 'static/pest/thumb/dfb.png', 'varCode': '01'}, {'id': 3, 'icanCode': 'YM_BING03', 'icanName': '丝黑穗病', 'thumbPicUrl': 'static/pest/thumb/shhb.png', 'varCode': '01'}, {'id': 4, 'icanCode': 'YM_BING04', 'icanName': '锈病', 'thumbPicUrl': 'static/pest/thumb/xb.png', 'varCode': '01'}, {'id': 17, 'icanCode': 'YM_BING05', 'icanName': '大斑病', 'thumbPicUrl': 'static/pest/thumb/dbb.png', 'varCode': '01'}, {'id': 18, 'icanCode': 'YM_BING06', 'icanName': '灰斑病', 'thumbPicUrl': 'static/pest/thumb/hbb.png', 'varCode': '01'}, {'id': 19, 'icanCode': 'YM_BING07', 'icanName': '茎腐病', 'thumbPicUrl': 'static/pest/thumb/jfb.png', 'varCode': '01'}, {'id': 20, 'icanCode': 'YM_BING08', 'icanName': '穗腐病', 'thumbPicUrl': 'static/pest/thumb/sfb.png', 'varCode': '01'}, {'id': 21, 'icanCode': 'YM_BING09', 'icanName': '矮化病', 'thumbPicUrl': 'static/pest/thumb/ahb.png', 'varCode': '01'}, {'id': 22, 'icanCode': 'YM_BING010', 'icanName': '粗缩病', 'thumbPicUrl': 'static/pest/thumb/csb.png', 'varCode': '01'}, {'id': 23, 'icanCode': 'YM_BING011', 'icanName': '苗枯病', 'thumbPicUrl': 'static/pest/thumb/mkb.png', 'varCode': '01'}, {'id': 24, 'icanCode': 'YM_BING012', 'icanName': '纹枯病', 'thumbPicUrl': 'static/pest/thumb/wkb.png', 'varCode': '01'}, {'id': 27, 'icanCode': 'YM_BING013', 'icanName': '小斑病', 'thumbPicUrl': 'static/pest/thumb/xbb.png', 'varCode': '01'}, {'id': 28, 'icanCode': 'YM_BING014', 'icanName': '叶斑病', 'thumbPicUrl': 'static/pest/thumb/ybb.png', 'varCode': '01'}, {'id': 40, 'icanCode': 'YM_BING015', 'icanName': '疯顶病', 'thumbPicUrl': 'static/pest/thumb/ymfdb.png', 'varCode': '01'}, {'id': 41, 'icanCode': 'YM_BING016', 'icanName': '霜霉病', 'thumbPicUrl': 'static/pest/thumb/ymsmb.png', 'varCode': '01'}, {'id': 44, 'icanCode': 'YM_BING017', 'icanName': '弯孢菌叶斑病', 'thumbPicUrl': 'static/pest/thumb/wbjybb.png', 'varCode': '01'}, {'id': 84, 'icanCode': 'YM_BING018', 'icanName': '北方炭疽病', 'thumbPicUrl': 'static/pest/thumb/bftjb.png', 'varCode': '01'}], 'chong': [{'id': 5, 'icanCode': 'YM_CHONG01', 'icanName': '地老虎', 'thumbPicUrl': 'static/pest/thumb/dlh.png', 'varCode': '01'}, {'id': 6, 'icanCode': 'YM_CHONG02', 'icanName': '红蜘蛛', 'thumbPicUrl': 'static/pest/thumb/hzz.png', 'varCode': '01'}, {'id': 7, 'icanCode': 'YM_CHONG03', 'icanName': '玉米蚜', 'thumbPicUrl': 'static/pest/thumb/yc.png', 'varCode': '01'}, {'id': 8, 'icanCode': 'YM_CHONG04', 'icanName': '三点斑叶蝉', 'thumbPicUrl': 'static/pest/thumb/sdbyc.png', 'varCode': '01'}, {'id': 9, 'icanCode': 'YM_CHONG05', 'icanName': '双斑萤叶甲', 'thumbPicUrl': 'static/pest/thumb/sbyyj.png', 'varCode': '01'}, {'id': 10, 'icanCode': 'YM_CHONG06', 'icanName': '玉米螟', 'thumbPicUrl': 'static/pest/thumb/ymm.png', 'varCode': '01'}, {'id': 13, 'icanCode': 'YM_CHONG07', 'icanName': '金针虫', 'thumbPicUrl': 'static/pest/thumb/jzc.png', 'varCode': '01'}, {'id': 14, 'icanCode': 'YM_CHONG08', 'icanName': '蛴螬', 'thumbPicUrl': 'static/pest/thumb/qc.png', 'varCode': '01'}, {'id': 15, 'icanCode': 'YM_CHONG09', 'icanName': '粘虫', 'thumbPicUrl': 'static/pest/thumb/nc.png', 'varCode': '01'}, {'id': 25, 'icanCode': 'YM_CHONG10', 'icanName': '蓟马', 'thumbPicUrl': 'static/pest/thumb/jm.png', 'varCode': '01'}, {'id': 26, 'icanCode': 'YM_CHONG11', 'icanName': '灰飞虱', 'thumbPicUrl': 'static/pest/thumb/hfs.png', 'varCode': '01'}, {'id': 29, 'icanCode': 'YM_CHONG12', 'icanName': '棉铃虫', 'thumbPicUrl': 'static/pest/thumb/mlc.png', 'varCode': '01'}, {'id': 42, 'icanCode': 'YM_CHONG13', 'icanName': '草地贪夜蛾', 'thumbPicUrl': 'static/pest/thumb/cdtye.png', 'varCode': '01'}, {'id': 43, 'icanCode': 'YM_CHONG14', 'icanName': '蝼蛄', 'thumbPicUrl': 'static/pest/thumb/lg.png', 'varCode': '01'}]}, {'is_colorful': '1', 'gray_pic': 'static/crop_pic/gray_shuidao.png', 'colorful_pic': 'static/crop_pic/real_shuidao.png', 'varCode': '02', 'varName': '水稻', 'pests': [{'id': 31, 'icanCode': 'SD_BING02', 'icanName': '叶瘟病', 'thumbPicUrl': 'static/sd_pest/icon/ywb.png', 'varCode': '02'}, {'id': 32, 'icanCode': 'SD_BING03', 'icanName': '纹枯病', 'thumbPicUrl': 'static/sd_pest/icon/wkb.png', 'varCode': '02'}, {'id': 33, 'icanCode': 'SD_BING04', 'icanName': '穗颈瘟', 'thumbPicUrl': 'static/sd_pest/icon/sjw.png', 'varCode': '02'}, {'id': 34, 'icanCode': 'SD_BING05', 'icanName': '稻曲病', 'thumbPicUrl': 'static/sd_pest/icon/dqb.png', 'varCode': '02'}, {'id': 37, 'icanCode': 'SD_CHONG03', 'icanName': '稻纵卷叶螟', 'thumbPicUrl': 'static/sd_pest/icon/dzjym.png', 'varCode': '02'}, {'id': 38, 'icanCode': 'SD_CHONG04', 'icanName': '水稻潜叶蝇', 'thumbPicUrl': 'static/sd_pest/icon/sdqyy.png', 'varCode': '02'}, {'id': 39, 'icanCode': 'SD_CHONG05', 'icanName': '稻飞虱', 'thumbPicUrl': 'static/sd_pest/icon/bbfs.png', 'varCode': '02'}, {'id': 64, 'icanCode': 'SD_CHONG06', 'icanName': '水稻棉铃虫', 'thumbPicUrl': 'static/sd_pest/icon/mlc.png', 'varCode': '02'}, {'id': 65, 'icanCode': 'SD_BING06', 'icanName': '水稻白叶枯病', 'thumbPicUrl': 'static/sd_pest/icon/bykb.png', 'varCode': '02'}, {'id': 66, 'icanCode': 'SD_CHONG07', 'icanName': '水稻稻蝗', 'thumbPicUrl': 'static/sd_pest/icon/dh.png', 'varCode': '02'}, {'id': 67, 'icanCode': 'SD_CHONG08', 'icanName': '水稻稻螟蛉', 'thumbPicUrl': 'static/sd_pest/icon/dml.png', 'varCode': '02'}, {'id': 68, 'icanCode': 'SD_BING07', 'icanName': '水稻胡麻斑病', 'thumbPicUrl': 'static/sd_pest/icon/hmbb.png', 'varCode': '02'}, {'id': 69, 'icanCode': 'SD_CHONG09', 'icanName': '水稻螟虫', 'thumbPicUrl': 'static/sd_pest/icon/mc.png', 'varCode': '02'}, {'id': 71, 'icanCode': 'SD_BING08', 'icanName': '稻瘟病', 'thumbPicUrl': 'static/sd_pest/icon/sjw.png', 'varCode': '02'}], 'bing': [{'id': 31, 'icanCode': 'SD_BING02', 'icanName': '叶瘟病', 'thumbPicUrl': 'static/sd_pest/icon/ywb.png', 'varCode': '02'}, {'id': 32, 'icanCode': 'SD_BING03', 'icanName': '纹枯病', 'thumbPicUrl': 'static/sd_pest/icon/wkb.png', 'varCode': '02'}, {'id': 33, 'icanCode': 'SD_BING04', 'icanName': '穗颈瘟', 'thumbPicUrl': 'static/sd_pest/icon/sjw.png', 'varCode': '02'}, {'id': 34, 'icanCode': 'SD_BING05', 'icanName': '稻曲病', 'thumbPicUrl': 'static/sd_pest/icon/dqb.png', 'varCode': '02'}, {'id': 65, 'icanCode': 'SD_BING06', 'icanName': '水稻白叶枯病', 'thumbPicUrl': 'static/sd_pest/icon/bykb.png', 'varCode': '02'}, {'id': 68, 'icanCode': 'SD_BING07', 'icanName': '水稻胡麻斑病', 'thumbPicUrl': 'static/sd_pest/icon/hmbb.png', 'varCode': '02'}, {'id': 71, 'icanCode': 'SD_BING08', 'icanName': '稻瘟病', 'thumbPicUrl': 'static/sd_pest/icon/sjw.png', 'varCode': '02'}], 'chong': [{'id': 37, 'icanCode': 'SD_CHONG03', 'icanName': '稻纵卷叶螟', 'thumbPicUrl': 'static/sd_pest/icon/dzjym.png', 'varCode': '02'}, {'id': 38, 'icanCode': 'SD_CHONG04', 'icanName': '水稻潜叶蝇', 'thumbPicUrl': 'static/sd_pest/icon/sdqyy.png', 'varCode': '02'}, {'id': 39, 'icanCode': 'SD_CHONG05', 'icanName': '稻飞虱', 'thumbPicUrl': 'static/sd_pest/icon/bbfs.png', 'varCode': '02'}, {'id': 64, 'icanCode': 'SD_CHONG06', 'icanName': '水稻棉铃虫', 'thumbPicUrl': 'static/sd_pest/icon/mlc.png', 'varCode': '02'}, {'id': 66, 'icanCode': 'SD_CHONG07', 'icanName': '水稻稻蝗', 'thumbPicUrl': 'static/sd_pest/icon/dh.png', 'varCode': '02'}, {'id': 67, 'icanCode': 'SD_CHONG08', 'icanName': '水稻稻螟蛉', 'thumbPicUrl': 'static/sd_pest/icon/dml.png', 'varCode': '02'}, {'id': 69, 'icanCode': 'SD_CHONG09', 'icanName': '水稻螟虫', 'thumbPicUrl': 'static/sd_pest/icon/mc.png', 'varCode': '02'}]}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_xiaomai.png', 'colorful_pic': 'static/crop_pic/real_xiaomai.png', 'varCode': '04', 'varName': '小麦', 'pests': [{'id': 45, 'icanCode': 'XM_BING01', 'icanName': '小麦全蚀病', 'thumbPicUrl': 'static/xm_pest/icon/qsb.png', 'varCode': '04'}, {'id': 46, 'icanCode': 'XM_CHONG01', 'icanName': '小麦吸浆虫', 'thumbPicUrl': 'static/xm_pest/icon/xjc.png', 'varCode': '04'}, {'id': 47, 'icanCode': 'XM_BING02', 'icanName': '小麦根腐病', 'thumbPicUrl': 'static/xm_pest/icon/gfb.png', 'varCode': '04'}, {'id': 48, 'icanCode': 'XM_BING03', 'icanName': '小麦炭疽病', 'thumbPicUrl': 'static/xm_pest/icon/tjb.png', 'varCode': '04'}, {'id': 49, 'icanCode': 'XM_BING04', 'icanName': '小麦白粉病', 'thumbPicUrl': 'static/xm_pest/icon/bfb.png', 'varCode': '04'}, {'id': 50, 'icanCode': 'XM_BING05', 'icanName': '小麦纹枯病', 'thumbPicUrl': 'static/xm_pest/icon/wkb.png', 'varCode': '04'}, {'id': 51, 'icanCode': 'XM_BING06', 'icanName': '小麦赤霉病', 'thumbPicUrl': 'static/xm_pest/icon/cmb.png', 'varCode': '04'}, {'id': 52, 'icanCode': 'XM_BING07', 'icanName': '小麦锈病', 'thumbPicUrl': 'static/xm_pest/icon/xb.png', 'varCode': '04'}, {'id': 53, 'icanCode': 'XM_CHONG02', 'icanName': '地老虎', 'thumbPicUrl': 'static/pest/thumb/dlh.png', 'varCode': '04'}, {'id': 54, 'icanCode': 'XM_CHONG03', 'icanName': '小麦蚜虫', 'thumbPicUrl': 'static/xm_pest/icon/yc.png', 'varCode': '04'}, {'id': 55, 'icanCode': 'XM_CHONG04', 'icanName': '蛴螬', 'thumbPicUrl': 'static/pest/thumb/qc.png', 'varCode': '04'}, {'id': 56, 'icanCode': 'XM_CHONG05', 'icanName': '蝼蛄', 'thumbPicUrl': 'static/pest/thumb/lg.png', 'varCode': '04'}, {'id': 57, 'icanCode': 'XM_CHONG06', 'icanName': '金针虫', 'thumbPicUrl': 'static/pest/thumb/jzc.png', 'varCode': '04'}, {'id': 58, 'icanCode': 'XM_CHONG07', 'icanName': '麦叶蜂', 'thumbPicUrl': 'static/xm_pest/icon/myf.png', 'varCode': '04'}, {'id': 60, 'icanCode': 'XM_CHONG09', 'icanName': '麦蜘蛛', 'thumbPicUrl': 'static/xm_pest/icon/mzz.png', 'varCode': '04'}], 'bing': [{'id': 45, 'icanCode': 'XM_BING01', 'icanName': '小麦全蚀病', 'thumbPicUrl': 'static/xm_pest/icon/qsb.png', 'varCode': '04'}, {'id': 47, 'icanCode': 'XM_BING02', 'icanName': '小麦根腐病', 'thumbPicUrl': 'static/xm_pest/icon/gfb.png', 'varCode': '04'}, {'id': 48, 'icanCode': 'XM_BING03', 'icanName': '小麦炭疽病', 'thumbPicUrl': 'static/xm_pest/icon/tjb.png', 'varCode': '04'}, {'id': 49, 'icanCode': 'XM_BING04', 'icanName': '小麦白粉病', 'thumbPicUrl': 'static/xm_pest/icon/bfb.png', 'varCode': '04'}, {'id': 50, 'icanCode': 'XM_BING05', 'icanName': '小麦纹枯病', 'thumbPicUrl': 'static/xm_pest/icon/wkb.png', 'varCode': '04'}, {'id': 51, 'icanCode': 'XM_BING06', 'icanName': '小麦赤霉病', 'thumbPicUrl': 'static/xm_pest/icon/cmb.png', 'varCode': '04'}, {'id': 52, 'icanCode': 'XM_BING07', 'icanName': '小麦锈病', 'thumbPicUrl': 'static/xm_pest/icon/xb.png', 'varCode': '04'}], 'chong': [{'id': 46, 'icanCode': 'XM_CHONG01', 'icanName': '小麦吸浆虫', 'thumbPicUrl': 'static/xm_pest/icon/xjc.png', 'varCode': '04'}, {'id': 53, 'icanCode': 'XM_CHONG02', 'icanName': '地老虎', 'thumbPicUrl': 'static/pest/thumb/dlh.png', 'varCode': '04'}, {'id': 54, 'icanCode': 'XM_CHONG03', 'icanName': '小麦蚜虫', 'thumbPicUrl': 'static/xm_pest/icon/yc.png', 'varCode': '04'}, {'id': 55, 'icanCode': 'XM_CHONG04', 'icanName': '蛴螬', 'thumbPicUrl': 'static/pest/thumb/qc.png', 'varCode': '04'}, {'id': 56, 'icanCode': 'XM_CHONG05', 'icanName': '蝼蛄', 'thumbPicUrl': 'static/pest/thumb/lg.png', 'varCode': '04'}, {'id': 57, 'icanCode': 'XM_CHONG06', 'icanName': '金针虫', 'thumbPicUrl': 'static/pest/thumb/jzc.png', 'varCode': '04'}, {'id': 58, 'icanCode': 'XM_CHONG07', 'icanName': '麦叶蜂', 'thumbPicUrl': 'static/xm_pest/icon/myf.png', 'varCode': '04'}, {'id': 60, 'icanCode': 'XM_CHONG09', 'icanName': '麦蜘蛛', 'thumbPicUrl': 'static/xm_pest/icon/mzz.png', 'varCode': '04'}]}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_mianhua.png', 'colorful_pic': 'static/crop_pic/real_mianhua.png', 'varCode': '03', 'varName': '棉花', 'pests': [{'id': 72, 'icanCode': 'MH_CHONG01', 'icanName': '地老虎', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx5Zyw6ICB6JmOMS0wMQ==.png', 'varCode': '03'}, {'id': 73, 'icanCode': 'MH_CHONG02', 'icanName': '棉蓟马', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx6JOf6amsMS0wMQ==.png', 'varCode': '03'}, {'id': 74, 'icanCode': 'MH_CHONG03', 'icanName': '棉蚜', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6JqcMS0wMQ==.png', 'varCode': '03'}, {'id': 75, 'icanCode': 'MH_CHONG04', 'icanName': '棉叶螨', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ5Y+26J6oMS0wMQ==.png', 'varCode': '03'}, {'id': 76, 'icanCode': 'MH_CHONG05', 'icanName': '棉铃虫', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6ZOD6JmrMS0wMQ==.png', 'varCode': '03'}, {'id': 77, 'icanCode': 'MH_BING01', 'icanName': '立枯病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx56uL5p6v55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 78, 'icanCode': 'MH_BING02', 'icanName': '茎枯病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx6IyO5p6v55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 79, 'icanCode': 'MH_BING03', 'icanName': '黄萎病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx6buE6JCO55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 80, 'icanCode': 'MH_BING04', 'icanName': '枯萎病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx5p6v6JCO55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 81, 'icanCode': 'MH_BING05', 'icanName': '炭疽病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx54Kt55a955eFMS0wMQ==.png', 'varCode': '03'}], 'bing': [{'id': 77, 'icanCode': 'MH_BING01', 'icanName': '立枯病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx56uL5p6v55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 78, 'icanCode': 'MH_BING02', 'icanName': '茎枯病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx6IyO5p6v55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 79, 'icanCode': 'MH_BING03', 'icanName': '黄萎病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx6buE6JCO55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 80, 'icanCode': 'MH_BING04', 'icanName': '枯萎病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx5p6v6JCO55eFMS0wMQ==.png', 'varCode': '03'}, {'id': 81, 'icanCode': 'MH_BING05', 'icanName': '炭疽病', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx54Kt55a955eFMS0wMQ==.png', 'varCode': '03'}], 'chong': [{'id': 72, 'icanCode': 'MH_CHONG01', 'icanName': '地老虎', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx5Zyw6ICB6JmOMS0wMQ==.png', 'varCode': '03'}, {'id': 73, 'icanCode': 'MH_CHONG02', 'icanName': '棉蓟马', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6Iqx6JOf6amsMS0wMQ==.png', 'varCode': '03'}, {'id': 74, 'icanCode': 'MH_CHONG03', 'icanName': '棉蚜', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6JqcMS0wMQ==.png', 'varCode': '03'}, {'id': 75, 'icanCode': 'MH_CHONG04', 'icanName': '棉叶螨', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ5Y+26J6oMS0wMQ==.png', 'varCode': '03'}, {'id': 76, 'icanCode': 'MH_CHONG05', 'icanName': '棉铃虫', 'thumbPicUrl': 'static/mh_pest/icon/5qOJ6ZOD6JmrMS0wMQ==.png', 'varCode': '03'}]}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_dadou.png', 'colorful_pic': 'static/crop_pic/real_dadou.png', 'varCode': '05', 'varName': '大豆', 'pests': [], 'bing': [], 'chong': []}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_malingshu.png', 'colorful_pic': 'static/crop_pic/real_malingshu.png', 'varCode': '06', 'varName': '马铃薯', 'pests': [], 'bing': [], 'chong': []}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_taozi.png', 'colorful_pic': 'static/crop_pic/real_taozi.png', 'varCode': '10', 'varName': '桃子', 'pests': [], 'bing': [], 'chong': []}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_pingguo.png', 'colorful_pic': 'static/crop_pic/real_pingguo.png', 'varCode': '07', 'varName': '苹果', 'pests': [], 'bing': [], 'chong': []}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_fanqie.png', 'colorful_pic': 'static/crop_pic/real_fanqie.png', 'varCode': '08', 'varName': '番茄', 'pests': [], 'bing': [], 'chong': []}, {'is_colorful': '0', 'gray_pic': 'static/crop_pic/gray_yancao.png', 'colorful_pic': 'static/crop_pic/real_yancao.png', 'varCode': '09', 'varName': '烟草', 'pests': [], 'bing': [], 'chong': []}], 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Registration</td>
+    <td>更多新闻</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c20',1)" class="detail" id='c20'>详细</a></td>
+</tr>
+
+    <tr id='pt20_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_registration</div></td>
+        <td style="vertical-align: middle">更多新闻</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt20_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt20_1'>通过</button>
+        <div id='div_pt20_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt20_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt20_1'>通过</button>
+        <div id='div_pt20_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt20_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2NH0.pBridUwB-0PvCxqRxWEpy5bPN1k5a2B3YUa4ToZzpZA
+http://icanapi.aikenong.com.cn/version2.0/news/?size=15&amp;content_tag=1001&amp;page=1&amp;title=
+&lt;Response [200]&gt;
+{'data': [{'pk': 415, 'title': '7月玉米钻心虫危害来袭！如何防治才能达到好的效果？', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/16598f6e-c57c-11ea-a640-fa163e5c3d8d.jpg', 'summary': '北方春玉米也将陆续进入拔节期，是玉米螟防治关键时期。', 'pub_time': '2020-07-14 10:46:56', 'pub_status': '1', 'view_num': 135, 'thumb_pic2': 'static/media/news/thumb/1659a904-c57c-11ea-a640-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/415.html?pk=415'}, {'pk': 412, 'title': '今年雨水较多，一定要及早防治玉米顶腐病！', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/72bee0c8-c1ae-11ea-aa29-fa163e5c3d8d.jpg', 'summary': '玉米顶腐病是玉米顶端腐烂病的总称，是玉米在生长的过程中算是比较常见的一种病害', 'pub_time': '2020-07-09 14:38:32', 'pub_status': '1', 'view_num': 479, 'thumb_pic2': 'static/media/news/thumb/72bee9ba-c1ae-11ea-aa29-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/412.html?pk=412'}, {'pk': 400, 'title': '【夏玉米】二点委夜蛾来了！从开始为害到造成大量死苗只有4-5天，怎么防治？', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/5b392b32-c0de-11ea-91c0-fa163e5c3d8d.jpg', 'summary': '二点委夜蛾已经成为黄淮海夏玉米区的常发性害虫。', 'pub_time': '2020-07-08 13:46:29', 'pub_status': '1', 'view_num': 58, 'thumb_pic2': 'static/media/news/thumb/5b3933c0-c0de-11ea-91c0-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/400.html?pk=400'}, {'pk': 393, 'title': '新疆：棉花和玉米种植的需水规律和灌溉原则', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/3738bb4e-c025-11ea-9e2c-fa163e5c3d8d.jpg', 'summary': '不同的阶段、不同气候和土壤条件，作物灌溉情况都不同', 'pub_time': '2020-07-07 15:41:40', 'pub_status': '1', 'view_num': 104, 'thumb_pic2': 'static/media/news/thumb/3738c1de-c025-11ea-9e2c-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/393.html?pk=393'}, {'pk': 392, 'title': '牛筋草、芦苇真的打不住？其实方法很简单', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/b903bec4-bf4b-11ea-bb49-fa163e5c3d8d.jpg', 'summary': '两种恶性杂草难治原因与防治方法', 'pub_time': '2020-07-06 13:45:26', 'pub_status': '1', 'view_num': 132, 'thumb_pic2': 'static/media/news/thumb/b903ee9e-bf4b-11ea-bb49-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/392.html?pk=392'}, {'pk': 391, 'title': '玉米、大豆、花生控旺技术大全！看完再也不作难！', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/1b5f6e20-bf2d-11ea-b74d-fa163e5c3d8d.jpg', 'summary': '旺长易倒伏、光合作用减弱、病虫害发生严重等，最终会导致减产。', 'pub_time': '2020-07-06 10:05:22', 'pub_status': '1', 'view_num': 89, 'thumb_pic2': 'static/media/news/thumb/1b5f7442-bf2d-11ea-b74d-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/391.html?pk=391'}, {'pk': 390, 'title': '阴雨、低温，如何防治玉米长“斑”', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/7c67339a-bcfa-11ea-811b-fa163e5c3d8d.jpg', 'summary': '降水勤，雨量大，气温低，防治玉米病害的发生', 'pub_time': '2020-07-03 15:06:58', 'pub_status': '1', 'view_num': 303, 'thumb_pic2': 'static/media/news/thumb/7c673944-bcfa-11ea-811b-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/390.html?pk=390'}, {'pk': 389, 'title': '警报！把玉米吃成光杆的粘虫又来了！', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/5063a026-bc3c-11ea-bf1a-fa163e5c3d8d.jpg', 'summary': '内蒙古东部、黑龙江、吉林爆发粘虫概率高', 'pub_time': '2020-07-02 16:17:22', 'pub_status': '1', 'view_num': 211, 'thumb_pic2': 'static/media/news/thumb/5063a5c6-bc3c-11ea-bf1a-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/389.html?pk=389'}, {'pk': 383, 'title': '6月实例图解：玉米、大豆、水稻病虫害问题防治建议（群精华）', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/cf127cc8-b9e2-11ea-9320-fa163e5c3d8d.jpg', 'summary': '顽固杂草、药害、病害、虫害，各位老师为你解答', 'pub_time': '2020-06-29 18:23:28', 'pub_status': '1', 'view_num': 280, 'thumb_pic2': 'static/media/news/thumb/cf128402-b9e2-11ea-9320-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/383.html?pk=383'}, {'pk': 382, 'title': '冰雹过后水稻、大豆、玉米如何抢救?', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1002', '1001', '1003'], 'thumb_pic': 'static/media/news/thumb/32141056-b9b7-11ea-9fae-fa163e5c3d8d.jpg', 'summary': '冰雹过后水稻、大豆、玉米如何抢救?', 'pub_time': '2020-06-29 13:57:41', 'pub_status': '1', 'view_num': 56, 'thumb_pic2': 'static/media/news/thumb/32141682-b9b7-11ea-9fae-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/382.html?pk=382'}, {'pk': 381, 'title': '玉米什么时候控旺？正确控旺增产30%', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/15ec3326-b459-11ea-9072-fa163e5c3d8d.jpg', 'summary': '何为玉米控旺？何时进行控旺？', 'pub_time': '2020-06-22 15:55:44', 'pub_status': '1', 'view_num': 2651, 'thumb_pic2': 'static/media/news/thumb/15ec3ad8-b459-11ea-9072-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/381.html?pk=381'}, {'pk': 375, 'title': '【高清图谱】识别玉米23种病害、14种虫害', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/31660164-afb2-11ea-a857-fa163e5c3d8d.jpg', 'summary': '玉米病虫害危害特征与防治方法', 'pub_time': '2020-06-16 18:28:03', 'pub_status': '1', 'view_num': 412, 'thumb_pic2': 'static/media/news/thumb/31660790-afb2-11ea-a857-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/375.html?pk=375'}, {'pk': 372, 'title': '6月图解：10个玉米病虫害问题及建议（群精华）', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/82c48efa-ab92-11ea-ba5e-fa163e5c3d8d.jpg', 'summary': '顽固杂草、药害、病害、虫害，各位老师为你解答', 'pub_time': '2020-06-11 18:23:32', 'pub_status': '1', 'view_num': 979, 'thumb_pic2': 'static/media/news/thumb/82c496b6-ab92-11ea-ba5e-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/372.html?pk=372'}, {'pk': 373, 'title': '新疆玉米中后期管理技术要点', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/3baef46c-abae-11ea-bc89-fa163e5c3d8d.jpg', 'summary': '除草、揭膜、水肥、病虫害等管理技术要点', 'pub_time': '2020-06-11 14:45:17', 'pub_status': '1', 'view_num': 199, 'thumb_pic2': 'static/media/news/thumb/3baf5984-abae-11ea-bc89-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/373.html?pk=373'}, {'pk': 367, 'title': '预警丨草地贪夜蛾6月在黄淮等地扩散蔓延可能性大', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/b1642870-a934-11ea-b2d0-fa163e5c3d8d.jpg', 'summary': '6月中下旬麦茬夏玉米将大量播种出苗，与迁入虫源高度吻合。', 'pub_time': '2020-06-08 11:04:53', 'pub_status': '1', 'view_num': 180, 'thumb_pic2': 'static/media/news/thumb/b1643338-a934-11ea-b2d0-fa163e5c3d8d.jpg', 'h5_path': 'http://media.aikenong.com.cn/static/news/367.html?pk=367'}], 'httpCode': 200, 'message': '', 'total_page': 8, 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_News_detail</td>
+    <td>农业新闻描述</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1.41秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c21',1)" class="detail" id='c21'>详细</a></td>
+</tr>
+
+    <tr id='pt21_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_news_detail</div></td>
+        <td style="vertical-align: middle">农业新闻描述</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt21_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt21_1'>通过</button>
+        <div id='div_pt21_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt21_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt21_1'>通过</button>
+        <div id='div_pt21_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt21_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2NH0.pBridUwB-0PvCxqRxWEpy5bPN1k5a2B3YUa4ToZzpZA
+http://icanapi.aikenong.com.cn/version2.0/news/detail/app/415/
+&lt;Response [200]&gt;
+{'data': {'pk': 415, 'title': '7月玉米钻心虫危害来袭！如何防治才能达到好的效果？', 'author': '于小乐', 'act_tags': '2001', 'content_tags': ['1001'], 'thumb_pic': 'static/media/news/thumb/16598f6e-c57c-11ea-a640-fa163e5c3d8d.jpg', 'summary': '北方春玉米也将陆续进入拔节期，是玉米螟防治关键时期。', 'pub_time': '2020-07-14 10:46:56', 'pub_status': '1', 'view_num': 135, 'zan_num': 0, 'thumb_pic2': 'static/media/news/thumb/1659a904-c57c-11ea-a640-fa163e5c3d8d.jpg', 'is_zan': '0'}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Registration</td>
+    <td>新闻详情</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.12秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c22',1)" class="detail" id='c22'>详细</a></td>
+</tr>
+
+    <tr id='pt22_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_registration</div></td>
+        <td style="vertical-align: middle">新闻详情</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt22_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt22_1'>通过</button>
+        <div id='div_pt22_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt22_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt22_1'>通过</button>
+        <div id='div_pt22_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt22_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2Nn0.3PA03I_O5QHZ5v5ozwCif579eOD1NeC9LRCXf6hhTks
+http://icanapi.aikenong.com.cn/version2.0/news/comment/list/415/
+&lt;Response [200]&gt;
+{'data': [], 'httpCode': 404, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Crop_Grow</td>
+    <td>作物生长记录</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.13秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c23',1)" class="detail" id='c23'>详细</a></td>
+</tr>
+
+    <tr id='pt23_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_crop_grow</div></td>
+        <td style="vertical-align: middle">作物生长记录</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt23_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt23_1'>通过</button>
+        <div id='div_pt23_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt23_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt23_1'>通过</button>
+        <div id='div_pt23_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt23_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2Nn0.3PA03I_O5QHZ5v5ozwCif579eOD1NeC9LRCXf6hhTks
+http://icanapi.aikenong.com.cn/version2.0/crop/growth/record/?land_id=38399
+&lt;Response [200]&gt;
+{'data': [], 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Lands</td>
+    <td>地块</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1.33秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c24',1)" class="detail" id='c24'>详细</a></td>
+</tr>
+
+    <tr id='pt24_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_lands</div></td>
+        <td style="vertical-align: middle">地块</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt24_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt24_1'>通过</button>
+        <div id='div_pt24_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt24_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt24_1'>通过</button>
+        <div id='div_pt24_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt24_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2Nn0.3PA03I_O5QHZ5v5ozwCif579eOD1NeC9LRCXf6hhTks
+http://icanapi.aikenong.com.cn/version2.0/maize/guide/1999/
+&lt;Response [200]&gt;
+{'data': {'plan_list': [{'guide': [{'taskCon': '播前整地，若秋季未整地，可于播种前两周进行顶浆整地。', 'mainId': 1575688}], 'cmdName': '整地', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '14', 'dateBegin': '04-03', 'dateEnd': '2020-04-04', 'actIcanId': 4, 'task_status': 0, 'count_down': -102, 'stage': 12, 'is_04': '1', 'taskCon': '播前整地，若秋季未整地，可于播种前两周进行顶浆整地。'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '30', 'unit': 'kg', 'taskCon': '（可种、肥同播）', 'fCode1': '01', 'famountl': '6.5', 'fCode2': '16', 'famount2': '8.6', 'fCode3': '', 'famount3': '', 'fCode4': '', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '二铵', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575689}], 'cmdName': '施肥', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '02', 'dateBegin': '04-14', 'dateEnd': '2020-04-15', 'actIcanId': 4, 'task_status': 0, 'count_down': -91, 'stage': 1, 'is_04': '1', 'taskCon': '（可种、肥同播）'}, {'guide': [{'taskCon': '播种：播种深度5公分。若种肥同播，肥料深度10公分，与种子水平距离5公分。播种机田间行进速度7~9km/h为宜。', 'mainId': 1575690}], 'cmdName': '播种', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '04', 'dateBegin': '04-17', 'dateEnd': '2020-04-18', 'actIcanId': 4, 'task_status': 0, 'count_down': -88, 'stage': 13, 'is_04': '1', 'taskCon': '播种：播种深度5公分。若种肥同播，肥料深度10公分，与种子水平距离5公分。播种机田间行进速度7~9km/h为宜。'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '36', 'unit': 'kg', 'taskCon': '播种后三天内滴灌', 'fCode1': '01', 'famountl': '', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '', 'f_name_2': '', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575691}], 'cmdName': '浇水', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '01', 'dateBegin': '04-17', 'dateEnd': '2020-04-18', 'actIcanId': 4, 'task_status': 0, 'count_down': -88, 'stage': 2, 'is_04': '1', 'taskCon': '播种后三天内滴灌'}, {'guide': [{'fl_pest_id': 3, 'ican_code': 'YM_BING03', 'ican_name': '丝黑穗病', 'content': '玉米丝黑穗病遍布世界各玉米产区，病原称程轴黑粉菌，属担子菌亚门真菌。苗期侵入、系统侵染性病害，一般在穗期表现典型症状，主要为害雌穗和雄穗。从全国来看，以北方春玉米区、西南丘陵山地玉米区和西北玉米区发病较重。', 'precure': '1、二次包衣：玉米种子可用60 g/L戊唑醇悬浮种衣剂进行二次包衣，每100kg种子用药130ml进行包衣，或用4.23%甲霜灵·种菌唑微乳种衣剂进行二次包衣，每100kg种子用药80-100ml进行包衣，搅拌均匀，或用甲霜灵、精甲霜灵、吡虫啉、噻虫嗪等杀菌剂对种子进行杀菌处理；\r\n2、土壤处理：可用 75％辛硫磷拌成毒土或毒砂，撒施 20～30 kg/亩，或用 50％辛硫磷乳油 1 000 倍液、2.5％溴氰菊酯 3 000 倍液进行地面喷洒或喷在作物上。', 'thumb_url': 'static/pest/thumb/shhb.png', 'pic_urls': 'static/pest/1/shhb1.png##', 'large_pic_urls': 'static/pest/large1/shhb_large_1.jpg##', 'mainId': 1575708, 'taskCon': '播种期应注意预防以下病虫害，可通过二次包衣或土壤处理等方式进行预防。  '}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '06', 'dateBegin': '04-17', 'dateEnd': '2020-04-18', 'actIcanId': 4, 'task_status': 0, 'count_down': -88, 'stage': 1001, 'is_04': '1', 'taskCon': '播种期应注意预防以下病虫害，可通过二次包衣或土壤处理等方式进行预防。  '}, {'guide': [{'taskCon': '出苗后检查田间玉米出苗情况，如有断垄及时补种。', 'mainId': 1575692}], 'cmdName': '查苗补种', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '10', 'dateBegin': '05-17', 'dateEnd': '2020-05-18', 'actIcanId': 4, 'task_status': 0, 'count_down': -58, 'stage': 23, 'is_04': '1', 'taskCon': '出苗后检查田间玉米出苗情况，如有断垄及时补种。'}, {'guide': [{'taskCon': '查看田间杂草发生情况，施用硝磺草酮、莠去津或烟嘧磺隆类苗后除草剂。', 'mainId': 1575693}], 'cmdName': '除草', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '05', 'dateBegin': '05-20', 'dateEnd': '2020-05-21', 'actIcanId': 4, 'task_status': 0, 'count_down': -55, 'stage': 15, 'is_04': '1', 'taskCon': '查看田间杂草发生情况，施用硝磺草酮、莠去津或烟嘧磺隆类苗后除草剂。'}, {'guide': [{'fl_pest_id': 3, 'ican_code': 'YM_BING03', 'ican_name': '丝黑穗病', 'content': '玉米丝黑穗病遍布世界各玉米产区，病原称程轴黑粉菌，属担子菌亚门真菌。苗期侵入、系统侵染性病害，一般在穗期表现典型症状，主要为害雌穗和雄穗。从全国来看，以北方春玉米区、西南丘陵山地玉米区和西北玉米区发病较重。', 'precure': '1、苗期若出现地下害虫，可用化学药剂阿维哒螨灵、吡虫啉等杀虫剂进行防治，降低虫口密度；\r\n2、苗期和生长期症状明显时及时割除发病植株，并带出田外深埋。', 'thumb_url': 'static/pest/thumb/shhb.png', 'pic_urls': 'static/pest/1/shhb1.png##', 'large_pic_urls': 'static/pest/large1/shhb_large_1.jpg##', 'mainId': 1575709, 'taskCon': '苗期应注意以下病虫害的发生情况，如有病株及时拔除。'}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '06', 'dateBegin': '05-20', 'dateEnd': '2020-05-21', 'actIcanId': 4, 'task_status': 0, 'count_down': -55, 'stage': 1002, 'is_04': '1', 'taskCon': '苗期应注意以下病虫害的发生情况，如有病株及时拔除。'}, {'guide': [{'taskCon': '间苗：去弱留强，去小留大，去病留健；定苗：可结合中耕松土，若遇缺株，两侧可留双苗。', 'mainId': 1575694}], 'cmdName': '间苗定苗', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '11', 'dateBegin': '05-23', 'dateEnd': '2020-05-24', 'actIcanId': 4, 'task_status': 0, 'count_down': -52, 'stage': 16, 'is_04': '1', 'taskCon': '间苗：去弱留强，去小留大，去病留健；定苗：可结合中耕松土，若遇缺株，两侧可留双苗。'}, {'guide': [{'taskCon': '每亩配置硫酸锌0.1公斤，硼砂0.05公斤，加水50公斤，叶面喷施。', 'mainId': 1575695}], 'cmdName': '叶面肥', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '09', 'dateBegin': '06-01', 'dateEnd': '2020-06-02', 'actIcanId': 4, 'task_status': 0, 'count_down': -43, 'stage': 17, 'is_04': '1', 'taskCon': '每亩配置硫酸锌0.1公斤，硼砂0.05公斤，加水50公斤，叶面喷施。'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '42', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '5.4', 'fCode2': '15', 'famount2': '2.6', 'fCode3': '13', 'famount3': '2.9', 'fCode4': '12', 'famount4': '2.4', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575696}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '03', 'dateBegin': '06-01', 'dateEnd': '2020-06-02', 'actIcanId': 4, 'task_status': 0, 'count_down': -43, 'stage': 3, 'is_04': '1', 'taskCon': ''}, {'guide': [{'fl_pest_id': 3, 'ican_code': 'YM_BING03', 'ican_name': '丝黑穗病', 'content': '玉米丝黑穗病遍布世界各玉米产区，病原称程轴黑粉菌，属担子菌亚门真菌。苗期侵入、系统侵染性病害，一般在穗期表现典型症状，主要为害雌穗和雄穗。从全国来看，以北方春玉米区、西南丘陵山地玉米区和西北玉米区发病较重。', 'precure': '1、拔除病株：苗期和生长期症状明显时或生长后期病穗未开裂散出黑粉（冬孢子）之前，及时割除发病植株，并带出田外深埋。', 'thumb_url': 'static/pest/thumb/shhb.png', 'pic_urls': 'static/pest/1/shhb1.png##', 'large_pic_urls': 'static/pest/large1/shhb_large_1.jpg##', 'mainId': 1575710, 'taskCon': '拔节期应对以下病虫害进行预防，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂进行预防。'}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '06', 'dateBegin': '06-01', 'dateEnd': '2020-06-02', 'actIcanId': 4, 'task_status': 0, 'count_down': -43, 'stage': 1003, 'is_04': '1', 'taskCon': '拔节期应对以下病虫害进行预防，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂进行预防。'}, {'guide': [{'taskCon': '对玉米长势过旺的地块喷施植物生长调节剂（如矮壮素），以防倒伏', 'mainId': 1575697}], 'cmdName': '生长调节剂', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '12', 'dateBegin': '06-07', 'dateEnd': '2020-06-08', 'actIcanId': 4, 'task_status': 0, 'count_down': -37, 'stage': 18, 'is_04': '1', 'taskCon': '对玉米长势过旺的地块喷施植物生长调节剂（如矮壮素），以防倒伏'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '42', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '5.4', 'fCode2': '15', 'famount2': '2.6', 'fCode3': '13', 'famount3': '4.5', 'fCode4': '12', 'famount4': '3.8', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575698}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '03', 'dateBegin': '06-07', 'dateEnd': '2020-06-08', 'actIcanId': 4, 'task_status': 0, 'count_down': -37, 'stage': 4, 'is_04': '1', 'taskCon': ''}, {'guide': [{'wfPlanId': 1, 'wfAmount': '48', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '6.6', 'fCode2': '15', 'famount2': '1.5', 'fCode3': '13', 'famount3': '2.7', 'fCode4': '12', 'famount4': '2.2', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575699}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '03', 'dateBegin': '06-15', 'dateEnd': '2020-06-16', 'actIcanId': 4, 'task_status': 0, 'count_down': -29, 'stage': 5, 'is_04': '1', 'taskCon': ''}, {'guide': [{'taskCon': '每亩配置硫酸锌0.1公斤，硼砂0.05公斤，加水50公斤，叶面喷施。', 'mainId': 1575700}], 'cmdName': '叶面肥', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '09', 'dateBegin': '06-15', 'dateEnd': '2020-06-16', 'actIcanId': 4, 'task_status': 0, 'count_down': -29, 'stage': 19, 'is_04': '1', 'taskCon': '每亩配置硫酸锌0.1公斤，硼砂0.05公斤，加水50公斤，叶面喷施。'}, {'guide': [{'fl_pest_id': 1, 'ican_code': 'YM_BING01', 'ican_name': '瘤黑粉病', 'content': '玉米瘤黑粉病由瘤黑粉菌引起发病，属担子菌亚门，常为害玉米叶、秆、雄穗和果穗等部位的幼嫩组织，产生大小不一的病瘤，是我国玉米上分布最广的主要病害之一，北方发生较为普遍而严重。', 'precure': '1、喷药预防：可用 50%可湿性福美双 500～800 倍液, 或 0.3 °Bé石硫合剂，或15%三唑酮可湿粉剂900～1 200 g/hm2 对水750～900 kg 喷雾，可减轻再侵染危害。\r\n2、农业防治：田间早期发现病瘤应及时拔除并深埋，玉米收获后及时清除田间病残体，并带离田间深埋，后期及早割除菌瘿。', 'thumb_url': 'static/pest/thumb/lhfb.png', 'pic_urls': 'static/pest/1/lhfb1.png##static/pest/2/lhfb2.png##', 'large_pic_urls': 'static/pest/large1/lhfb_large_1.jpg##static/pest/large2/lhfb_large_2.jpg##', 'mainId': 1575711, 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}, {'fl_pest_id': 3, 'ican_code': 'YM_BING03', 'ican_name': '丝黑穗病', 'content': '玉米丝黑穗病遍布世界各玉米产区，病原称程轴黑粉菌，属担子菌亚门真菌。苗期侵入、系统侵染性病害，一般在穗期表现典型症状，主要为害雌穗和雄穗。从全国来看，以北方春玉米区、西南丘陵山地玉米区和西北玉米区发病较重。', 'precure': '1、拔除病株：苗期和生长期症状明显时或生长后期病穗未开裂散出黑粉（冬孢子）之前，及时割除发病植株，并带出田外深埋。', 'thumb_url': 'static/pest/thumb/shhb.png', 'pic_urls': 'static/pest/1/shhb1.png##', 'large_pic_urls': 'static/pest/large1/shhb_large_1.jpg##', 'mainId': 1575711, 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}, {'fl_pest_id': 6, 'ican_code': 'YM_CHONG02', 'ican_name': '红蜘蛛', 'content': '玉米红蜘蛛又称玉米叶螨，属蛛形纲、蜱螨目、叶螨科。俗称大蜘蛛、大龙、砂龙等。玉米叶螨种类很多，主要有二斑叶螨、朱砂叶螨和截形叶螨。具有较高的发生频率，容易形成暴发性。', 'precure': '1、化学方法：可选用20%唑螨酯7-10g/亩防治红蜘蛛，喷液量15-20升/亩。', 'thumb_url': 'static/pest/thumb/hzz.png', 'pic_urls': 'static/pest/2/hzz2.png##static/pest/1/hzz1.png##', 'large_pic_urls': 'static/pest/large2/hzz_large_2.jpg##static/pest/large1/hzz_large_1.jpg##', 'mainId': 1575711, 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}, {'fl_pest_id': 7, 'ican_code': 'YM_CHONG03', 'ican_name': '玉米蚜', 'content': '玉米蚜，蚜科缢管蚜属的一种昆虫。有害生物，可为害玉米、水稻及多种禾本科杂草。苗期以成蚜、若蚜群集在心叶中为害，抽穗后为害穗部，吸收汁液，妨碍生长，还能传播多种禾本科谷类病毒。', 'precure': '1、化学方法：可用46%氟啶.啶虫咪5g/亩防治蚜虫，喷液量15-20升/亩，尤其是对抗性蚜虫效果更加突出；或用70%吡虫啉5g/亩防治蚜虫，喷液量15-20升/亩。', 'thumb_url': 'static/pest/thumb/yc.png', 'pic_urls': 'static/pest/2/yc2.png##static/pest/1/yc1.png##', 'large_pic_urls': 'static/pest/large2/yc_large_2.jpg##static/pest/large1/yc_large_1.jpg##', 'mainId': 1575711, 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}, {'fl_pest_id': 9, 'ican_code': 'YM_CHONG05', 'ican_name': '双斑萤叶甲', 'content': '双斑萤叶甲属鞘翅目，叶甲科，又称双斑长跗萤叶甲。广布东北、华北、江苏、浙江、湖北、江西、福建、广东、广西、宁夏、甘肃、陕西、四川、云南、贵州、台湾等省区。主要危害豆类、马铃薯、苜蓿、玉米、等作物。', 'precure': '1、化学方法：可选用 4.5%高效氯氰菊酯乳油 1000~1500 倍液、20%速灭杀丁乳油 2000 倍液或 20%吡虫啉乳油 3000 倍液喷雾防治，每隔 5~7 天喷一次，连喷1~2 次。喷药时间以上午 9 时前、下午 5 时后为宜，喷药时重点喷洒雌穗周围，地边杂草也要喷到，以消灭寄生源。', 'thumb_url': 'static/pest/thumb/sbyyj.png', 'pic_urls': 'static/pest/2/sbyyj2.png##static/pest/1/sbyyj1.png##', 'large_pic_urls': 'static/pest/large2/sbyyj_large_2.jpg##static/pest/large1/sbyyj_large_1.jpg##', 'mainId': 1575711, 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}, {'fl_pest_id': 10, 'ican_code': 'YM_CHONG06', 'ican_name': '玉米螟', 'content': '玉米螟又叫玉米钻心虫，属于鳞翅目，螟蛾科，我国发生的玉米螟有亚洲玉米螟和欧洲玉米螟两种，主要为害玉米、高粱、谷子等，也能为害棉花甘蔗、大麻、向日葵、水稻、甜菜、甘蔗豆类等作物，属于世界性害虫。', 'precure': '1、化学防治：可用20%氟苯虫酰胺悬浮剂在玉米大喇叭口期（玉米8-12片叶）8-12g/亩喷雾，喷液量15-20升/亩；用40%氯虫.噻虫嗪在玉米大喇叭口期（玉米8-12片叶）10-12g/亩喷雾，喷液量15-20升/亩；用16000iu/毫克苏云金杆菌100-200g/亩防治玉米螟，喷液量15-20升/亩。\r\n2、丢心：每亩用3%辛硫磷颗粒1.5-2kg，按1:30的比例拌细沙土均匀的撒于心叶内。\r\n3、生物防治：用赤眼蜂防治。通常在百株玉米有玉米螟卵1-2块时第一次放蜂，一般每亩一次放蜂1万即可。根据实际情况在二代玉米螟发生前可以再次放蜂防治玉米螟', 'thumb_url': 'static/pest/thumb/ymm.png', 'pic_urls': 'static/pest/2/ymm2.png##static/pest/1/ymm1.png##', 'large_pic_urls': 'static/pest/large2/ymm_large_2.jpg##static/pest/large1/ymm_large_1.jpg##', 'mainId': 1575711, 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '06', 'dateBegin': '06-20', 'dateEnd': '2020-06-21', 'actIcanId': 4, 'task_status': 0, 'count_down': -24, 'stage': 1004, 'is_04': '1', 'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '48', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '3.1', 'fCode2': '15', 'famount2': '1.5', 'fCode3': '13', 'famount3': '0.5', 'fCode4': '12', 'famount4': '0.4', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575701}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '03', 'dateBegin': '06-24', 'dateEnd': '2020-06-25', 'actIcanId': 4, 'task_status': 0, 'count_down': -20, 'stage': 6, 'is_04': '1', 'taskCon': ''}, {'guide': [{'wfPlanId': 1, 'wfAmount': '48', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '1.7', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575702}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '03', 'dateBegin': '07-16', 'dateEnd': '2020-07-17', 'actIcanId': 4, 'task_status': 1, 'count_down': 2, 'stage': 7, 'is_04': '1', 'taskCon': ''}, {'guide': [{'wfPlanId': 1, 'wfAmount': '42', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '', 'f_name_2': '', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575703}], 'cmdName': '浇水', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '01', 'dateBegin': '07-19', 'dateEnd': '2020-07-20', 'actIcanId': 4, 'task_status': 1, 'count_down': 5, 'stage': 8, 'is_04': '1', 'taskCon': ''}, {'guide': [{'fl_pest_id': 1, 'ican_code': 'YM_BING01', 'ican_name': '瘤黑粉病', 'content': '玉米瘤黑粉病由瘤黑粉菌引起发病，属担子菌亚门，常为害玉米叶、秆、雄穗和果穗等部位的幼嫩组织，产生大小不一的病瘤，是我国玉米上分布最广的主要病害之一，北方发生较为普遍而严重。', 'precure': '1、喷药预防：可用 50%可湿性福美双 500～800 倍液, 或 0.3 °Bé石硫合剂，或15%三唑酮可湿粉剂900～1 200 g/hm2 对水750～900 kg 喷雾，可减轻再侵染危害。\r\n2、农业防治：田间早期发现病瘤应及时拔除并深埋，玉米收获后及时清除田间病残体，并带离田间深埋，后期及早割除菌瘿。', 'thumb_url': 'static/pest/thumb/lhfb.png', 'pic_urls': 'static/pest/1/lhfb1.png##static/pest/2/lhfb2.png##', 'large_pic_urls': 'static/pest/large1/lhfb_large_1.jpg##static/pest/large2/lhfb_large_2.jpg##', 'mainId': 1575712, 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}, {'fl_pest_id': 3, 'ican_code': 'YM_BING03', 'ican_name': '丝黑穗病', 'content': '玉米丝黑穗病遍布世界各玉米产区，病原称程轴黑粉菌，属担子菌亚门真菌。苗期侵入、系统侵染性病害，一般在穗期表现典型症状，主要为害雌穗和雄穗。从全国来看，以北方春玉米区、西南丘陵山地玉米区和西北玉米区发病较重。', 'precure': '1、拔除病株：苗期和生长期症状明显时或生长后期病穗未开裂散出黑粉（冬孢子）之前，及时割除发病植株，并带出田外深埋。', 'thumb_url': 'static/pest/thumb/shhb.png', 'pic_urls': 'static/pest/1/shhb1.png##', 'large_pic_urls': 'static/pest/large1/shhb_large_1.jpg##', 'mainId': 1575712, 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}, {'fl_pest_id': 6, 'ican_code': 'YM_CHONG02', 'ican_name': '红蜘蛛', 'content': '玉米红蜘蛛又称玉米叶螨，属蛛形纲、蜱螨目、叶螨科。俗称大蜘蛛、大龙、砂龙等。玉米叶螨种类很多，主要有二斑叶螨、朱砂叶螨和截形叶螨。具有较高的发生频率，容易形成暴发性。', 'precure': '1、化学方法：可选用20%唑螨酯7-10g/亩防治红蜘蛛，喷液量15-20升/亩。', 'thumb_url': 'static/pest/thumb/hzz.png', 'pic_urls': 'static/pest/2/hzz2.png##static/pest/1/hzz1.png##', 'large_pic_urls': 'static/pest/large2/hzz_large_2.jpg##static/pest/large1/hzz_large_1.jpg##', 'mainId': 1575712, 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}, {'fl_pest_id': 7, 'ican_code': 'YM_CHONG03', 'ican_name': '玉米蚜', 'content': '玉米蚜，蚜科缢管蚜属的一种昆虫。有害生物，可为害玉米、水稻及多种禾本科杂草。苗期以成蚜、若蚜群集在心叶中为害，抽穗后为害穗部，吸收汁液，妨碍生长，还能传播多种禾本科谷类病毒。', 'precure': '1、化学方法：可用46%氟啶.啶虫咪5g/亩防治蚜虫，喷液量15-20升/亩，尤其是对抗性蚜虫效果更加突出；或用70%吡虫啉5g/亩防治蚜虫，喷液量15-20升/亩。', 'thumb_url': 'static/pest/thumb/yc.png', 'pic_urls': 'static/pest/2/yc2.png##static/pest/1/yc1.png##', 'large_pic_urls': 'static/pest/large2/yc_large_2.jpg##static/pest/large1/yc_large_1.jpg##', 'mainId': 1575712, 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}, {'fl_pest_id': 9, 'ican_code': 'YM_CHONG05', 'ican_name': '双斑萤叶甲', 'content': '双斑萤叶甲属鞘翅目，叶甲科，又称双斑长跗萤叶甲。广布东北、华北、江苏、浙江、湖北、江西、福建、广东、广西、宁夏、甘肃、陕西、四川、云南、贵州、台湾等省区。主要危害豆类、马铃薯、苜蓿、玉米、等作物。', 'precure': '1、化学方法：可选用 4.5%高效氯氰菊酯乳油 1000~1500 倍液、20%速灭杀丁乳油 2000 倍液或 20%吡虫啉乳油 3000 倍液喷雾防治，每隔 5~7 天喷一次，连喷1~2 次。喷药时间以上午 9 时前、下午 5 时后为宜，喷药时重点喷洒雌穗周围，地边杂草也要喷到，以消灭寄生源。', 'thumb_url': 'static/pest/thumb/sbyyj.png', 'pic_urls': 'static/pest/2/sbyyj2.png##static/pest/1/sbyyj1.png##', 'large_pic_urls': 'static/pest/large2/sbyyj_large_2.jpg##static/pest/large1/sbyyj_large_1.jpg##', 'mainId': 1575712, 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}, {'fl_pest_id': 10, 'ican_code': 'YM_CHONG06', 'ican_name': '玉米螟', 'content': '玉米螟又叫玉米钻心虫，属于鳞翅目，螟蛾科，我国发生的玉米螟有亚洲玉米螟和欧洲玉米螟两种，主要为害玉米、高粱、谷子等，也能为害棉花甘蔗、大麻、向日葵、水稻、甜菜、甘蔗豆类等作物，属于世界性害虫。', 'precure': '1、化学防治：可用20%氟苯虫酰胺悬浮剂在玉米大喇叭口期（玉米8-12片叶）8-12g/亩喷雾，喷液量15-20升/亩；用40%氯虫.噻虫嗪在玉米大喇叭口期（玉米8-12片叶）10-12g/亩喷雾，喷液量15-20升/亩；用16000iu/毫克苏云金杆菌100-200g/亩防治玉米螟，喷液量15-20升/亩。\r\n2、丢心：每亩用3%辛硫磷颗粒1.5-2kg，按1:30的比例拌细沙土均匀的撒于心叶内。\r\n3、生物防治：用赤眼蜂防治。通常在百株玉米有玉米螟卵1-2块时第一次放蜂，一般每亩一次放蜂1万即可。根据实际情况在二代玉米螟发生前可以再次放蜂防治玉米螟', 'thumb_url': 'static/pest/thumb/ymm.png', 'pic_urls': 'static/pest/2/ymm2.png##static/pest/1/ymm1.png##', 'large_pic_urls': 'static/pest/large2/ymm_large_2.jpg##static/pest/large1/ymm_large_1.jpg##', 'mainId': 1575712, 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '06', 'dateBegin': '07-24', 'dateEnd': '2020-07-25', 'actIcanId': 4, 'task_status': 1, 'count_down': 10, 'stage': 1005, 'is_04': '1', 'taskCon': '灌浆期应注意以下病虫害的发生情况，如有发生可在本次灌水前利用高架车、无人机等进行药剂喷雾防治。'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '30', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '', 'f_name_2': '', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575704}], 'cmdName': '浇水', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '01', 'dateBegin': '07-25', 'dateEnd': '2020-07-26', 'actIcanId': 4, 'task_status': 1, 'count_down': 11, 'stage': 9, 'is_04': '1', 'taskCon': ''}, {'guide': [{'wfPlanId': 1, 'wfAmount': '30', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '', 'f_name_2': '', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575705}], 'cmdName': '浇水', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '01', 'dateBegin': '08-03', 'dateEnd': '2020-08-04', 'actIcanId': 4, 'task_status': 1, 'count_down': 20, 'stage': 10, 'is_04': '1', 'taskCon': ''}, {'guide': [{'wfPlanId': 1, 'wfAmount': '30', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '', 'f_name_2': '', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575706}], 'cmdName': '浇水', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '01', 'dateBegin': '08-21', 'dateEnd': '2020-08-22', 'actIcanId': 4, 'task_status': 1, 'count_down': 38, 'stage': 11, 'is_04': '1', 'taskCon': ''}, {'guide': [{'taskCon': '成熟', 'wfAmount': '1389', 'unit': 'kg/亩(含水量30%)\r\n\t 1151kg/亩(含水量15.5%)\r\n\t 该产量为潜力产量，未考虑管理不当等特殊情况。', 'mainId': 1575707}], 'cmdName': '成熟', 'landName': '爱科农示范田(新疆)', 'landId': '1999', 'cmdCode': '08', 'dateBegin': '09-21', 'dateEnd': '2020-09-22', 'actIcanId': 4, 'task_status': 1, 'count_down': 69, 'stage': 21, 'is_04': '1', 'taskCon': '成熟'}], 'crop_msg': {'varCode': '01', 'varName': '玉米', 'cropCode': '270', 'cropName': 'M751', 'RM': 114, 'population': '6500株/亩', 'risk_rate': '5', 'risk_name': '早霜风险'}, 'warning': '', 'f_dict': [[{'wfPlanId': 1, 'famount': '28.9', 'fertName': '尿素', 'userFertName': None, 'compfAmount': None, 'ord': None, 'order2': 2}, {'wfPlanId': 1, 'famount': '8.1', 'fertName': '工业级一铵', 'userFertName': None, 'compfAmount': None, 'ord': None, 'order2': 3}, {'wfPlanId': 1, 'famount': '8.6', 'fertName': '二铵', 'userFertName': None, 'compfAmount': None, 'ord': None, 'order2': 4}, {'wfPlanId': 1, 'famount': '10.7', 'fertName': '硫酸钾', 'userFertName': None, 'compfAmount': None, 'ord': None, 'order2': 5}, {'wfPlanId': 1, 'famount': '8.9', 'fertName': '氯化钾', 'userFertName': None, 'compfAmount': None, 'ord': None, 'order2': 6}]], 'stage_list': [{'stage_code': 'STG15', 'stage_name': '备播期', 'com_stage_id': ['12', '1'], 'stage_time': '04-03'}, {'stage_code': 'STG01', 'stage_name': '播种期', 'com_stage_id': ['13', '2', '1001', '1006', '1011', '1017', '33'], 'stage_time': '04-17'}, {'stage_code': 'STG03', 'stage_name': '幼苗期', 'com_stage_id': ['23', '15', '14', '1007', '1002', '1012', '16', '1018'], 'stage_time': '05-11'}, {'stage_code': 'STG04', 'stage_name': '拔节期', 'com_stage_id': ['17', '3', '26', '25', '1003', '1008', '1013', '1019'], 'stage_time': '06-01'}, {'stage_code': 'STG05', 'stage_name': '小喇叭口期', 'com_stage_id': ['18', '4', '5', '19', '27'], 'stage_time': '06-07'}, {'stage_code': 'STG06', 'stage_name': '大喇叭口期', 'com_stage_id': ['1004', '1009', '1014', '6', '20', '24', '1020'], 'stage_time': '06-20'}, {'stage_code': 'STG07', 'stage_name': '抽雄期', 'com_stage_id': ['7', '30'], 'stage_time': '07-16'}, {'stage_code': 'STG08', 'stage_name': '吐丝期', 'com_stage_id': ['8', '22', '28', '32', '1005', '1010', '1015', '1021'], 'stage_time': '07-19'}, {'stage_code': 'STG09', 'stage_name': '灌浆期', 'com_stage_id': ['9', '29', '31'], 'stage_time': '07-25'}, {'stage_code': 'STG10', 'stage_name': '乳熟期', 'com_stage_id': ['10'], 'stage_time': '08-03'}, {'stage_code': 'STG11', 'stage_name': '蜡熟期', 'com_stage_id': ['11'], 'stage_time': '08-21'}, {'stage_code': 'STG13', 'stage_name': '成熟期', 'com_stage_id': ['21'], 'stage_time': '09-21'}]}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Lands_pic</td>
+    <td>地块图片</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.15秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c25',1)" class="detail" id='c25'>详细</a></td>
+</tr>
+
+    <tr id='pt25_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_lands_pic</div></td>
+        <td style="vertical-align: middle">地块图片</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt25_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt25_1'>通过</button>
+        <div id='div_pt25_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt25_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt25_1'>通过</button>
+        <div id='div_pt25_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt25_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2N30.ewWSlAQIoigCxHkXVM1v0ZS-IEMW8dgzC2GqFhEOim0
+http://icanapi.aikenong.com.cn/version2.0/income/38399/
+&lt;Response [200]&gt;
+{'data': {'land_id': 38399, 'var_code': '01', 'expenditure': '0', 'income': '0', 'profit': '0', 'yie': '809', 'total_yie': '218.87', 'sys_income': '404908.0', 'sys_profit': '404908.0', 'sys_expenditure': '0', 'cur_flag': '1'}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Lands_pic</td>
+    <td>地块图片</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.4秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c26',1)" class="detail" id='c26'>详细</a></td>
+</tr>
+
+    <tr id='et26_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_lands_pic</div></td>
+        <td style="vertical-align: middle">地块图片</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et26_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et26_1'>错误</button>
+        <div id='div_et26_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et26_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et26_1'>错误</button>
+        <div id='div_et26_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et26_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2OH0.tC3jrT-0Gh2VqwvZK6bEjymCiNrS5KPN7h5i-q5aLy0
+http://icanapi.aikenong.com.cn/version2.0/land/pic/?land_id=1999
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_user_android\test_02_lands_04_lands_pic.py", line 28, in test01_lands_pic
+    json_str = resp.json()
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\models.py", line 898, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\simplejson\__init__.py", line 525, in loads
+    return _default_decoder.decode(s)
+  File "D:\Program Files\Java\Python38\lib\site-packages\simplejson\decoder.py", line 370, in decode
+    obj, end = self.raw_decode(s)
+  File "D:\Program Files\Java\Python38\lib\site-packages\simplejson\decoder.py", line 400, in raw_decode
+    return self.scan_once(s, idx=_w(s, idx).end())
+  File "D:\Program Files\Java\Python38\lib\site-packages\simplejson\scanner.py", line 79, in scan_once
+    return _scan_once(string, idx)
+  File "D:\Program Files\Java\Python38\lib\site-packages\simplejson\scanner.py", line 70, in _scan_once
+    raise JSONDecodeError(errmsg, string, idx)
+simplejson.errors.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Lands_pic</td>
+    <td>地块任务</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">3.89秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c27',1)" class="detail" id='c27'>详细</a></td>
+</tr>
+
+    <tr id='pt27_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_lands_pic</div></td>
+        <td style="vertical-align: middle">地块任务</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt27_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt27_1'>通过</button>
+        <div id='div_pt27_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt27_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt27_1'>通过</button>
+        <div id='div_pt27_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt27_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE2OH0.tC3jrT-0Gh2VqwvZK6bEjymCiNrS5KPN7h5i-q5aLy0
+http://icanapi.aikenong.com.cn/version2.0/maize/task/?land_id=1999
+&lt;Response [200]&gt;
+{'data': {'task_data': [{'guide': [{'taskCon': '播前整地，若秋季未整地，可于播种前两周进行顶浆整地。', 'expenditure': '-52704.0', 'mainId': 1575688}], 'cmdName': '整地', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '14', 'dateBegin': '04月02日', 'cmd_date': '2020-04-03', 'dateEnd': '04月04日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -103, 'stage': 12, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575688, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '30', 'unit': 'kg', 'taskCon': '（可种、肥同播）', 'fCode1': '01', 'famountl': '6.5', 'fCode2': '16', 'famount2': '8.6', 'fCode3': '', 'famount3': '', 'fCode4': '', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '二铵', 'f_name_3': '', 'f_name_4': '', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575689, 'expenditure': '0'}], 'cmdName': '施肥', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '02', 'dateBegin': '04月13日', 'cmd_date': '2020-04-14', 'dateEnd': '04月15日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -92, 'stage': 1, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575689, 'mu': '5270.4'}, {'guide': [{'taskCon': '播种：播种深度5公分。若种肥同播，肥料深度10公分，与种子水平距离5公分。播种机田间行进速度7~9km/h为宜。', 'expenditure': '-17128800.0', 'mainId': 1575690}], 'cmdName': '播种', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '04', 'dateBegin': '04月16日', 'cmd_date': '2020-04-17', 'dateEnd': '04月18日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -89, 'stage': 13, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575690, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '36', 'unit': 'kg', 'taskCon': '播种后三天内滴灌', 'fCode1': '01', 'famountl': '', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575691, 'expenditure': '-44009.1'}], 'cmdName': '浇水', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '01', 'dateBegin': '04月16日', 'cmd_date': '2020-04-17', 'dateEnd': '04月18日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -89, 'stage': 2, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575691, 'mu': '5270.4'}, {'guide': [{'taskCon': '播种期应注意预防以下病虫害，可通过二次包衣或土壤处理等方式进行预防。  ', 'expenditure': '-52704.0', 'mainId': 1575708}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '06', 'dateBegin': '04月16日', 'cmd_date': '2020-04-17', 'dateEnd': '04月18日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -89, 'stage': 1001, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575708, 'mu': '5270.4'}, {'guide': [{'taskCon': '出苗后检查田间玉米出苗情况，如有断垄及时补种。', 'expenditure': '0', 'mainId': 1575692}], 'cmdName': '查苗补种', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '10', 'dateBegin': '05月16日', 'cmd_date': '2020-05-17', 'dateEnd': '05月18日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -59, 'stage': 23, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575692, 'mu': '5270.4'}, {'guide': [{'taskCon': '查看田间杂草发生情况，施用硝磺草酮、莠去津或烟嘧磺隆类苗后除草剂。', 'expenditure': '-52704.0', 'mainId': 1575693}], 'cmdName': '除草', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '05', 'dateBegin': '05月19日', 'cmd_date': '2020-05-20', 'dateEnd': '05月21日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -56, 'stage': 15, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575693, 'mu': '5270.4'}, {'guide': [{'taskCon': '苗期应注意以下病虫害的发生情况。', 'expenditure': '-52704.0', 'mainId': 1575709}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '06', 'dateBegin': '05月19日', 'cmd_date': '2020-05-20', 'dateEnd': '05月21日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -56, 'stage': 1002, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575709, 'mu': '5270.4'}, {'guide': [{'taskCon': '间苗：去弱留强，去小留大，去病留健；定苗：可结合中耕松土，若遇缺株，两侧可留双苗。', 'expenditure': '0', 'mainId': 1575694}], 'cmdName': '间苗定苗', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '11', 'dateBegin': '05月22日', 'cmd_date': '2020-05-23', 'dateEnd': '05月24日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -53, 'stage': 16, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575694, 'mu': '5270.4'}, {'guide': [{'taskCon': '每亩配置硫酸锌0.1公斤，硼砂0.05公斤，加水50公斤，叶面喷施。', 'expenditure': '-52704.0', 'mainId': 1575695}], 'cmdName': '叶面肥', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '09', 'dateBegin': '05月31日', 'cmd_date': '2020-06-01', 'dateEnd': '06月02日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -44, 'stage': 17, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575695, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '42', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '5.4', 'fCode2': '15', 'famount2': '2.6', 'fCode3': '13', 'famount3': '2.9', 'fCode4': '12', 'famount4': '2.4', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575696, 'expenditure': '-51328.3'}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '03', 'dateBegin': '05月31日', 'cmd_date': '2020-06-01', 'dateEnd': '06月02日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -44, 'stage': 3, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575696, 'mu': '5270.4'}, {'guide': [{'taskCon': '拔节期应注意以下病虫害的发生情况。', 'expenditure': '-52704.0', 'mainId': 1575710}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '06', 'dateBegin': '05月31日', 'cmd_date': '2020-06-01', 'dateEnd': '06月02日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -44, 'stage': 1003, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575710, 'mu': '5270.4'}, {'guide': [{'taskCon': '对玉米长势过旺的地块喷施植物生长调节剂（如矮壮素），以防倒伏', 'expenditure': '-52704.0', 'mainId': 1575697}], 'cmdName': '生长调节剂', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '12', 'dateBegin': '06月06日', 'cmd_date': '2020-06-07', 'dateEnd': '06月08日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -38, 'stage': 18, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575697, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '42', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '5.4', 'fCode2': '15', 'famount2': '2.6', 'fCode3': '13', 'famount3': '4.5', 'fCode4': '12', 'famount4': '3.8', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575698, 'expenditure': '-51328.3'}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '03', 'dateBegin': '06月06日', 'cmd_date': '2020-06-07', 'dateEnd': '06月08日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -38, 'stage': 4, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575698, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '48', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '6.6', 'fCode2': '15', 'famount2': '1.5', 'fCode3': '13', 'famount3': '2.7', 'fCode4': '12', 'famount4': '2.2', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575699, 'expenditure': '-58647.5'}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '03', 'dateBegin': '06月14日', 'cmd_date': '2020-06-15', 'dateEnd': '06月16日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -30, 'stage': 5, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575699, 'mu': '5270.4'}, {'guide': [{'taskCon': '每亩配置硫酸锌0.1公斤，硼砂0.05公斤，加水50公斤，叶面喷施。', 'expenditure': '-52704.0', 'mainId': 1575700}], 'cmdName': '叶面肥', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '09', 'dateBegin': '06月14日', 'cmd_date': '2020-06-15', 'dateEnd': '06月16日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -30, 'stage': 19, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575700, 'mu': '5270.4'}, {'guide': [{'taskCon': '大喇叭口期应注意防治以下病虫害，如未发生可用高效氯氰菊酯、氯虫苯甲酰胺或辛硫磷类杀菌剂通过高架车、无人机等进行喷雾预防。', 'expenditure': '-52704.0', 'mainId': 1575711}], 'cmdName': '病虫防治', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '06', 'dateBegin': '06月19日', 'cmd_date': '2020-06-20', 'dateEnd': '06月21日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -25, 'stage': 1004, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575711, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '48', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '3.1', 'fCode2': '15', 'famount2': '1.5', 'fCode3': '13', 'famount3': '0.5', 'fCode4': '12', 'famount4': '0.4', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575701, 'expenditure': '-58647.5'}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '03', 'dateBegin': '06月23日', 'cmd_date': '2020-06-24', 'dateEnd': '06月25日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 0, 'count_down': -21, 'stage': 6, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575701, 'mu': '5270.4'}, {'guide': [{'wfPlanId': 1, 'wfAmount': '48', 'unit': 'kg', 'taskCon': '', 'fCode1': '01', 'famountl': '1.7', 'fCode2': '15', 'famount2': '', 'fCode3': '13', 'famount3': '', 'fCode4': '12', 'famount4': '', 'fCode5': '', 'famount5': '', 'fCode6': '', 'famount6': '', 'compfCode': '', 'compfamount': '', 'f_name_1': '尿素', 'f_name_2': '工业级一铵', 'f_name_3': '硫酸钾', 'f_name_4': '氯化钾', 'f_name_5': '', 'f_name_6': '', 'userFertName': '', 'mainId': 1575702, 'expenditure': '-58647.5'}], 'cmdName': '水肥一体化', 'landName': '爱科农示范田(新疆)', 'landId': 1999, 'cmdCode': '03', 'dateBegin': '07月15日', 'cmd_date': '2020-07-16', 'dateEnd': '07月17日', 'actIcanId': 4, 'pastFlag': None, 'task_status': 1, 'count_down': 1, 'stage': 7, 'is_04': '1', 'city_name': '伊宁县', 'city_name_up': '伊犁州', 'varCode': '01', 'varName': '玉米', 'ican_status': '98', 'manage': 1, 'wf_plan_id_user': None, 'weather_tip': '', 'mainId': 1575702, 'mu': '5270.4'}], 'record_url': 'static/manage/index.html', 'index_url': 'static/manage/guides.html', 'fert_price': [{'f_code': 'water', 'f_price': 0.23}, {'f_code': '01', 'f_price': 0.0}, {'f_code': '12', 'f_price': 0.0}, {'f_code': '13', 'f_price': 0.0}, {'f_code': '15', 'f_price': 0.0}, {'f_code': '16', 'f_price': 0.0}]}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Price</td>
+    <td>地块任务</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.22秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c28',1)" class="detail" id='c28'>详细</a></td>
+</tr>
+
+    <tr id='pt28_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_price</div></td>
+        <td style="vertical-align: middle">地块任务</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt28_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt28_1'>通过</button>
+        <div id='div_pt28_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt28_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt28_1'>通过</button>
+        <div id='div_pt28_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt28_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE3Mn0.F0NJIx2QxZrUcJirjjNULdrJw8WFGsL3gwNL9p7mAb0
+http://icanapi.aikenong.com.cn/version2.0/default/price/?land_id=38399
+&lt;Response [200]&gt;
+{'data': [{'pk': 158501, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF03', 'benfName': '施肥', 'accountFlag': '1', 'perPrice': '0', 'puCode': 'pu03', 'cmdCode': '02,03,', 'ord': 3, 'unit': '元/吨', 'varCode': '01', 'fert_list': [{'priceId': 158501, 'fert_id': 21059, 'ownerId': 10890, 'fertCode': '01', 'fertName': '尿素', 'perPrice': '0', 'puCode': 'pu03', 'ord': 1, 'unit': '元/吨'}, {'priceId': 158501, 'fert_id': 21060, 'ownerId': 10890, 'fertCode': '12', 'fertName': '氯化钾', 'perPrice': '0', 'puCode': 'pu03', 'ord': 12, 'unit': '元/吨'}, {'priceId': 158501, 'fert_id': 21061, 'ownerId': 10890, 'fertCode': '13', 'fertName': '硫酸钾', 'perPrice': '0', 'puCode': 'pu03', 'ord': 13, 'unit': '元/吨'}, {'priceId': 158501, 'fert_id': 21062, 'ownerId': 10890, 'fertCode': '15', 'fertName': '工业级一铵', 'perPrice': '0', 'puCode': 'pu03', 'ord': 15, 'unit': '元/吨'}, {'priceId': 158501, 'fert_id': 21063, 'ownerId': 10890, 'fertCode': '16', 'fertName': '二铵', 'perPrice': '0', 'puCode': 'pu03', 'ord': 16, 'unit': '元/吨'}]}, {'pk': 158502, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF04', 'benfName': '整地', 'accountFlag': '1', 'perPrice': '10.0', 'puCode': 'pu01', 'cmdCode': '14,', 'ord': 4, 'unit': '元/亩', 'varCode': '01'}, {'pk': 158503, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF05', 'benfName': '播种', 'accountFlag': '1', 'perPrice': '0.5', 'puCode': 'pu02', 'cmdCode': '04,', 'ord': 5, 'unit': '元/粒', 'varCode': '01', 'crop_spec': [{'pk': 158517, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF19', 'benfName': '玉米元每包', 'accountFlag': '0', 'perPrice': 10.0, 'puCode': 'pu05', 'cmdCode': None, 'ord': 12, 'unit': '元/包', 'varCode': '01'}, {'pk': 158518, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF20', 'benfName': '玉米粒每包', 'accountFlag': '0', 'perPrice': 20.0, 'puCode': 'pu06', 'cmdCode': None, 'ord': 13, 'unit': '粒/包', 'varCode': '01'}]}, {'pk': 158504, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF06', 'benfName': '浇水', 'accountFlag': '1', 'perPrice': '0.23', 'puCode': 'pu04', 'cmdCode': '01,15,', 'ord': 6, 'unit': '元/方', 'varCode': '01'}, {'pk': 158505, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF07', 'benfName': '除草', 'accountFlag': '1', 'perPrice': '10.0', 'puCode': 'pu01', 'cmdCode': '05,', 'ord': 7, 'unit': '元/亩', 'varCode': '01'}, {'pk': 158507, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF09', 'benfName': '生长调节剂', 'accountFlag': '1', 'perPrice': '10.0', 'puCode': 'pu01', 'cmdCode': '12,', 'ord': 9, 'unit': '元/亩', 'varCode': '01'}, {'pk': 158508, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF10', 'benfName': '病虫防治', 'accountFlag': '1', 'perPrice': '10.0', 'puCode': 'pu01', 'cmdCode': '06,', 'ord': 10, 'unit': '元/亩', 'varCode': '01'}, {'pk': 158509, 'ownerId': 10890, 'payType': 'OUT', 'benfCode': 'BENF11', 'benfName': '叶面肥', 'accountFlag': '1', 'perPrice': '10.0', 'puCode': 'pu01', 'cmdCode': '09,', 'ord': 11, 'unit': '元/亩', 'varCode': '01'}], 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Soil_Texts</td>
+    <td>地块任务</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.17秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c29',1)" class="detail" id='c29'>详细</a></td>
+</tr>
+
+    <tr id='pt29_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_soil_texts</div></td>
+        <td style="vertical-align: middle">地块任务</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt29_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt29_1'>通过</button>
+        <div id='div_pt29_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt29_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt29_1'>通过</button>
+        <div id='div_pt29_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt29_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDg5MCwidXNlcm5hbWUiOiIxODYxMDgwNjMzMiIsImV4cCI6MTYyNjE3NDE3Mn0.F0NJIx2QxZrUcJirjjNULdrJw8WFGsL3gwNL9p7mAb0
+http://icanapi.aikenong.com.cn/version2.0/soil_texts/detail/?land_id=38399
+&lt;Response [200]&gt;
+{'data': {'soil_data': {'SOM': '36.61g/kg', 'TN': '1.67g/kg', 'AN': '142.39mg/kg', 'AP': '7.86mg/kg', 'AK': '124.29mg/kg', 'pH': '6.75', 'BD': '1.18g/cm³', 'SI': '43.76%', 'SA': '38.20%', 'CL': '18.04%', 'texture': '粘壤土'}, 'level': {'SOM': 7, 'TN': 7, 'AP': 5, 'AK': 6, 'pH': 8, 'SI': 8, 'BD': 8, 'AN': 7}, 'level_desc': {'lev_code': '04', 'desc': '良好', 'min_val': 75, 'max_val': 85}, 'soil_texture': {'levCode': '06', 'texture': '粘壤土'}, 'explain': {'SOM': '有机质(SOM)含量较高：土壤肥沃，有机质经矿化可释放大量的营养元素供作物生长所需；可在当季施用基肥时少施或不施有机肥。', 'TN': '含氮量(N)较高：氮素是作物产量形成的关键因素，可根据作物需肥规律适量施用氮肥，确保土壤中的氮肥能够满足作物生长需求，促进高产。', 'AP': '有效磷(AP)含量较低：磷肥是作物产量及品质形成的关键影响因素，在含磷量低的土壤中应根据作物需肥规律适当增施磷肥，提高土壤肥力，促进作物高产优质。', 'AK': '速效钾(AK)含量适中：钾肥是作物产量及品质形成的关键影响因素，可在施基肥时根据作物生长需要适量施用钾肥，确保土壤中的钾肥能够满足作物生长所需，促进作物高产优质。', 'pH': '酸碱度(pH)：土壤呈中性，适合作物生长，无需改良。'}}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr id='total_row' class="text-center active">
+    <td colspan='2'>总计</td>
+    <td>29</td>
+    <td>28</td>
+    <td>0</td>
+    <td>1</td>
+    <td>12.0秒</td>
+    <td>通过率：96.55%</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+    <div id="toTop" style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer; display: none">
+    <a><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
+    </span></a></div>
+    
+</body>
+</html>

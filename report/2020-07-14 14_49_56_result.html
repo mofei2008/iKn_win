@@ -1,0 +1,1229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>爱耕耘商务版接口测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 1.2.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    
+<style type="text/css" media="screen">
+body        { font-family: Microsoft YaHei;padding: 20px; font-size: 100%; }
+table       { font-size: 100%; }
+.table tbody tr td{
+            vertical-align: middle;
+        }
+/* -- heading ---------------------------------------------------------------------- */
+.heading .description, .attribute {
+    clear: both;
+}
+/* --- 失败和错误合集样式 -- Gelomen --- */
+.failCollection, .errorCollection {
+    width: 100px;
+    float: left;
+}
+#failCaseOl li {
+    color: red
+}
+#errorCaseOl li {
+    color: orange
+}
+/* --- 打开截图特效样式 -- Gelomen --- */
+.data-img{
+    cursor:pointer
+}
+.pic_looper{
+    width:100%;
+    height:100%;
+    position: fixed;
+    left: 0;
+    top:0;
+    opacity: 0.6;
+    background: #000;
+    display: none;
+    z-index: 100;
+}
+.pic_show{
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+.pic_box{
+    padding:10px;
+    width:90%;
+    height:90%;
+    margin:40px auto;
+    text-align: center;
+    overflow: hidden;
+}
+.pic_box img{
+    width: auto;
+    height: 100%;
+    -moz-box-shadow: 0px 0px 20px 0px #000;
+    -webkit-box-shadow: 0px 0px 20px 0px #000;
+    box-shadow: 0px 0px 20px 0px #000;
+}
+/* --- 饼状图div样式 -- Gelomen --- */
+#container {
+    width: 450px;
+    height: 300px;
+    float: left;
+}
+/* -- report ------------------------------------------------------------------------ */
+#total_row  { font-weight: bold; }
+.passCase   { color: #5cb85c; }
+.failCase   { color: #d9534f; font-weight: bold; }
+.errorCase  { color: #f0ad4e; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+.screenshot:link { text-decoration: none;color: deeppink; }
+.screenshot:visited { text-decoration: none;color: deeppink; }
+.screenshot:hover { text-decoration: none;color: darkcyan; }
+.screenshot:active { text-decoration: none;color: deeppink; }
+</style>
+
+</head>
+<body >
+<script language="javascript" type="text/javascript">
+    $(function(){
+        // 修改 失败 和 错误 用例里对应按钮的颜色ClassName为动态加载 -- Gelomen
+    	$("button").each(function () {
+    	    var text = $(this).text();
+    	    if(text == "失败"){
+    	        $(this).addClass("btn-danger")
+            }else if(text == "错误") {
+                $(this).addClass("btn-warning")
+            }
+        });
+        // 给失败和错误合集加样式 -- Gelomen
+        var p_attribute = $("p.attribute");
+        p_attribute.eq(4).addClass("failCollection");
+        p_attribute.eq(5).addClass("errorCollection");
+        // 打开截图，放大，点击任何位置可以关闭图片  -- Gelomen
+        $(".screenshot").click(function(){
+            var img = $(this).attr("img");
+            $('.pic_show img').attr('src', img);
+            $('.pic_looper').fadeIn(200);
+            $('.pic_show').fadeIn(200);
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px")
+        });
+        $('.pic_looper, .pic_show').click(function(){
+            $('.pic_looper').fadeOut(200);
+            $('.pic_show').fadeOut(200)
+        });
+        var browserWidth = $(window).width();
+        var margin_left = browserWidth/2 - 450;
+        if(margin_left <= 240){
+            $("#container").css("margin", "auto");
+        }else {
+            $("#container").css("margin-left", margin_left + "px");
+        }
+        $(window).resize(function(){
+            // 改变窗口大小时，自动改变图片与顶部的距离  -- Gelomen
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px");
+            // 改变窗口大小时，自动改变饼图的边距  -- Gelomen
+            var browserWidth = $(window).width();
+            var margin_left = browserWidth/2 - 450;
+            if(margin_left <= 240){
+                $("#container").css("margin", "auto");
+            }else {
+                $("#container").css("margin-left", margin_left + "px");
+            }
+        });
+        // 距离顶部超过浏览器窗口一屏时，回到顶部按钮才出现  -- Gelomen
+        $(window).scroll(function(){
+            var browserHeight = $(window).height();
+            var top = $(window).scrollTop();
+            if(top >= browserHeight){
+                $("#toTop").css("display", "block")
+            }else {
+                $("#toTop").css("display", "none")
+            }
+        })
+        // 增加回到顶部过程的动画，以看上去不会那么生硬  -- Gelomen
+        $("#toTop").click(function() {
+            $("html,body").animate({"scrollTop":0}, 700)
+        })
+        // 增加饼状图  -- Gelomen
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                spacing : [0, 0, 0, 0]
+            },
+            credits: {
+                enabled: false
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: false
+                }
+            },
+            title: {
+                floating:true,
+                text: '测试结果占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    colors: ['#81ca9d', '#f16d7e', '#fdc68c'],
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    point: {
+                        events: {
+                            mouseOver: function(e) {  // 鼠标滑过时动态更新标题
+                                chart.setTitle({
+                                    text: e.target.name+ '\t'+ e.target.y + ' 个'
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '80%',
+                name: '比例',
+                data: [
+                    ['通过', 17],
+                    {
+                        name: '失败',
+                        y: 0,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['错误', 5]
+                ]
+            }]
+        }, function(c) {
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                titleHeight = parseInt(c.title.styles.fontSize);
+            c.setTitle({
+                y:centerY + titleHeight/2
+            });
+            chart = c;
+        });
+        // 查看 失败 和 错误 合集链接文字切换  -- Gelomen
+        $(".showDetail").click(function () {
+            if($(this).html() == "点击查看"){
+                $(this).html("点击收起")
+            }else {
+                $(this).html("点击查看")
+            }
+        })
+    });
+output_list = Array();
+/*level 调整增加只显示通过用例的分类 --Findyou / 修复筛选显示bug --Gelomen
+0:Summary //all hiddenRow
+1:Failed  //pt&et hiddenRow, ft none
+2:Pass    //pt none, ft&et hiddenRow
+3:Error   //pt&ft hiddenRow, et none
+4:All     //all none
+*/
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level == 2 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level == 1 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'et') {
+            if (level == 1 || level == 0 || level == 2) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+    }
+    //加入【详细】切换文字变化 --Findyou
+    detail_class=document.getElementsByClassName('detail');
+	//console.log(detail_class.length)
+	if (level == 3) {
+		for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="收起"
+		}
+	}
+	else{
+			for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="详细"
+		}
+	}
+}
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        //ID修改 点 为 下划线 -Findyou
+        tid0 = 't' + cid.substr(1) + '_' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'e' + tid0;
+                tr = document.getElementById(tid);
+            }
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        //修改点击无法收起的BUG，加入【详细】切换文字变化 --Findyou
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+            document.getElementById(cid).innerText = "详细"
+        }
+        else {
+            document.getElementById(tid).className = '';
+            document.getElementById(cid).innerText = "收起"
+        }
+    }
+}
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+</script>
+<div class='pic_looper'></div> <div class='pic_show'><div class='pic_box'><img src=''/></div> </div>
+<div class='heading'>
+<div style="width: 650px; float: left;">
+    <h1 style="font-family: Microsoft YaHei">爱耕耘商务版接口测试报告</h1>
+    <p class='attribute'><strong>测试人员 : </strong> 李德涛</p>
+<p class='attribute'><strong>开始时间 : </strong> 2020-07-14 14:49:56</p>
+<p class='attribute'><strong>合计耗时 : </strong> 0:00:05.841347</p>
+<p class='attribute'><strong>测试结果 : </strong> 共 22，通过 17，错误 5，通过率 = 77.27%</p>
+<p class='attribute'><strong>失败用例合集 : </strong> <ol style='float: left;'>无</ol></p>
+<p class='attribute'><strong>错误用例合集 : </strong> <div class='panel-default' style='float: left;'><a class='showDetail' data-toggle='collapse' href='#errorCaseOl' style='text-decoration: none;'>点击查看</a></div><ol id='errorCaseOl' class='collapse' style='float: left;'><li>test09_salerank (test_01_index_salerank.Test_Salerank)</li><li>test01_weather (test_01_index_weather.Test_Weather)</li><li>test05_customercount (test_02_customer_customercount.Test_CustomerCount)</li><li>test01_customerlist (test_02_customer_customerlist.Test_CustomerList)</li><li>test01_emplist (test_02_customer_emplist.Test_EmpList)</li></ol></p>
+
+    <p class='description'>测试详情如下：description</p>
+</div>
+<div id="container"></div>
+</div>
+
+
+<div style="width: 500px; clear: both;">
+<p id='show_detail_line'>
+<a class="btn btn-primary" href='javascript:showCase(0)'>概要{ 77.27% }</a>
+<a class="btn btn-success" href='javascript:showCase(2)'>通过{ 17 }</a>
+<a class="btn btn-danger" href='javascript:showCase(1)'>失败{ 0 }</a>
+<a class="btn btn-warning" href='javascript:showCase(3)'>错误{ 5 }</a>
+<a class="btn btn-info" href='javascript:showCase(4)'>所有{ 22 }</a>
+</p>
+</div>
+<table id='result_table' class="table table-condensed table-bordered table-hover">
+<colgroup>
+<col align='left' style="width: 300px;"/>
+<col align='right' style="width: 300px;"/>
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' style="width: 200px;"/>
+</colgroup>
+<tr id='header_row' class="text-center success" style="font-weight: bold;font-size: 14px;">
+    <td>用例集/测试用例</td>
+    <td>说明</td>
+    <td>总计</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>耗时</td>
+    <td>详细</td>
+</tr>
+
+<tr class='passClass warning'>
+    <td>Test_Company</td>
+    <td>公司信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.38秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c1',1)" class="detail" id='c1'>详细</a></td>
+</tr>
+
+    <tr id='pt1_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_company</div></td>
+        <td style="vertical-align: middle">公司信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt1_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt1_1'>通过</button>
+        <div id='div_pt1_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt1_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt1_1'>通过</button>
+        <div id='div_pt1_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt1_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4NH0.4Sj2-_M2lupwjYDmt_4b234RXH7Z6oICNzzMHK4uQfI
+https://pbsapi.aikenong.com.cn/boss/locations/company/
+&lt;Response [200]&gt;
+{'data': {'compCode': 105710052, 'compName': '爱科农-001', 'province': '吉林省', 'city': '长春市', 'county': '南关区', 'township': '明珠街道', 'addressDetail': '吉林省长春市南关区明珠街道', 'longitude': 125.327, 'latitude': 43.8276}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Cuscount</td>
+    <td>客户排行榜</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.37秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c2',1)" class="detail" id='c2'>详细</a></td>
+</tr>
+
+    <tr id='pt2_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_cuscount</div></td>
+        <td style="vertical-align: middle">客户排行榜</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt2_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt2_1'>通过</button>
+        <div id='div_pt2_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt2_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt2_1'>通过</button>
+        <div id='div_pt2_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt2_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4NH0.4Sj2-_M2lupwjYDmt_4b234RXH7Z6oICNzzMHK4uQfI
+https://pbsapi.aikenong.com.cn/boss/emp/cuscount/
+&lt;Response [200]&gt;
+{'data': [{'num': 1, 'empId': 142, 'emp_name': '陈胜', 'count': 25}, {'num': 2, 'empId': 79, 'emp_name': '孙文', 'count': 9}, {'num': 3, 'empId': 80, 'emp_name': '孙武', 'count': 8}, {'num': 4, 'empId': 107, 'emp_name': '扁鹊', 'count': 8}, {'num': 5, 'empId': 110, 'emp_name': '荆轲', 'count': 8}, {'num': 6, 'empId': 103, 'emp_name': '吕不韦', 'count': 3}, {'num': 7, 'empId': 104, 'emp_name': '商鞅', 'count': 3}, {'num': 8, 'empId': 177, 'emp_name': '刘明', 'count': 3}, {'num': 9, 'empId': 102, 'emp_name': '李斯', 'count': 2}, {'num': 10, 'empId': 106, 'emp_name': '孙膑', 'count': 2}], 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Info</td>
+    <td>用户信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.33秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c3',1)" class="detail" id='c3'>详细</a></td>
+</tr>
+
+    <tr id='pt3_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_info</div></td>
+        <td style="vertical-align: middle">用户信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt3_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt3_1'>通过</button>
+        <div id='div_pt3_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt3_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt3_1'>通过</button>
+        <div id='div_pt3_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt3_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4NH0.4Sj2-_M2lupwjYDmt_4b234RXH7Z6oICNzzMHK4uQfI
+https://pbsapi.aikenong.com.cn/boss/user/informations/
+&lt;Response [200]&gt;
+{'data': {'mobile': '13611112222', 'id': 12340079, 'user_name': '孙文', 'avatar': 'static/media/avatar/default_avatar.png', 'is_boss': '1', 'user_guide': 'https://icanapi.aikenong.com.cn/version2.0/static/ican_manual/manual.html', 'company': '爱科农-001', 'compcode': 105710052, 'address': '吉林省长春市南关区明珠街道', 'longitude': 125.327, 'latitude': 43.8276}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Login</td>
+    <td>登录功能</td>
+    <td class="text-center">3</td>
+    <td class="text-center">3</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.64秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c4',3)" class="detail" id='c4'>详细</a></td>
+</tr>
+
+    <tr id='pt4_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_1___13611112222____akn2019666____httpCode___200_</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_1: https://pbsapi.aikenong.com.cn/boss/login/
+测试开始！
+200
+{'data': {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4NX0.IQTfRk9-8f89ESncUmveKskPHDB8v209r66rMM8Bu6Y', 'user_id': 12340079, 'mobile': '13611112222', 'comp_flag': '', 'main_var_code': None, 'username': '孙文', 'compCode': 105710052, 'compName': '爱科农-001', 'address': [{'id': 43, 'icanId': 12340079, 'province': '黑龙江省', 'city': '大庆市', 'county': '龙凤区', 'township': '开发区黎明街道', 'addressDetail': '黑龙江省大庆市龙凤区开发区黎明街道大庆博物馆', 'longitude': 125.154, 'latitude': 46.5852, 'curFlag': '0'}, {'id': 486, 'icanId': 12340079, 'province': '河北省', 'city': '唐山市', 'county': '路北区', 'township': '果园乡', 'addressDetail': '河北省唐山市路北区果园乡驴肉火烧荷叶饭', 'longitude': 118.099, 'latitude': 39.6411, 'curFlag': '0'}, {'id': 487, 'icanId': 12340079, 'province': '内蒙古自治区', 'city': '锡林郭勒盟', 'county': '锡林浩特市', 'township': '锡林浩特汽车站', 'addressDetail': '致富路与那达慕大街交叉口西南150米锡林浩特汽车站', 'longitude': 116.088, 'latitude': 43.9382, 'curFlag': '0'}, {'id': 526, 'icanId': 12340079, 'province': '黑龙江省', 'city': '绥化市', 'county': '兰西县', 'township': '康荣乡', 'addressDetail': '黑龙江省绥化市兰西县康荣乡哈黑路', 'longitude': 126.262, 'latitude': 46.1988, 'curFlag': '0'}]}, 'httpCode': 200, 'msg': '登录成功'}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt4_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_2___13611112222____akn2019666____msg____登录成功__</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_2'>通过</button>
+        <div id='div_pt4_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_2'>通过</button>
+        <div id='div_pt4_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_2: https://pbsapi.aikenong.com.cn/boss/login/
+测试开始！
+登录成功
+{'data': {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4NX0.IQTfRk9-8f89ESncUmveKskPHDB8v209r66rMM8Bu6Y', 'user_id': 12340079, 'mobile': '13611112222', 'comp_flag': '', 'main_var_code': None, 'username': '孙文', 'compCode': 105710052, 'compName': '爱科农-001', 'address': [{'id': 43, 'icanId': 12340079, 'province': '黑龙江省', 'city': '大庆市', 'county': '龙凤区', 'township': '开发区黎明街道', 'addressDetail': '黑龙江省大庆市龙凤区开发区黎明街道大庆博物馆', 'longitude': 125.154, 'latitude': 46.5852, 'curFlag': '0'}, {'id': 486, 'icanId': 12340079, 'province': '河北省', 'city': '唐山市', 'county': '路北区', 'township': '果园乡', 'addressDetail': '河北省唐山市路北区果园乡驴肉火烧荷叶饭', 'longitude': 118.099, 'latitude': 39.6411, 'curFlag': '0'}, {'id': 487, 'icanId': 12340079, 'province': '内蒙古自治区', 'city': '锡林郭勒盟', 'county': '锡林浩特市', 'township': '锡林浩特汽车站', 'addressDetail': '致富路与那达慕大街交叉口西南150米锡林浩特汽车站', 'longitude': 116.088, 'latitude': 43.9382, 'curFlag': '0'}, {'id': 526, 'icanId': 12340079, 'province': '黑龙江省', 'city': '绥化市', 'county': '兰西县', 'township': '康荣乡', 'addressDetail': '黑龙江省绥化市兰西县康荣乡哈黑路', 'longitude': 126.262, 'latitude': 46.1988, 'curFlag': '0'}]}, 'httpCode': 200, 'msg': '登录成功'}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt4_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_3___13611112222____2121212____code_____400___</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_3'>通过</button>
+        <div id='div_pt4_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_3'>通过</button>
+        <div id='div_pt4_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_3: https://pbsapi.aikenong.com.cn/boss/login/
+测试开始！
+['400']
+{'msg': ['用户名或密码错误'], 'code': ['400'], 'data': ['None']}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_MonthSale</td>
+    <td>月农资销售额</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.35秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c5',1)" class="detail" id='c5'>详细</a></td>
+</tr>
+
+    <tr id='pt5_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_monthsale</div></td>
+        <td style="vertical-align: middle">月农资销售额</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt5_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt5_1'>通过</button>
+        <div id='div_pt5_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt5_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt5_1'>通过</button>
+        <div id='div_pt5_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt5_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4NX0.IQTfRk9-8f89ESncUmveKskPHDB8v209r66rMM8Bu6Y
+https://pbsapi.aikenong.com.cn/boss/goods/mouthsale/?m_date=2020-07
+&lt;Response [200]&gt;
+{"data":{"allamount":150.0,"seedamount":0,"fertamount":110.0,"dbugamount":40.0,"otheramount":0},"httpCode":200,"message":"","total_page":"","count":""}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_NumCount</td>
+    <td>本年客户分析</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.37秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c6',1)" class="detail" id='c6'>详细</a></td>
+</tr>
+
+    <tr id='pt6_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test08_numcount</div></td>
+        <td style="vertical-align: middle">本年客户分析</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt6_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt6_1'>通过</button>
+        <div id='div_pt6_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt6_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt6_1'>通过</button>
+        <div id='div_pt6_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt6_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4Nn0.txJqbeGOg6_3NztmMwK-Q0MjMAh3-SJr-dFfV84X2p4
+https://pbsapi.aikenong.com.cn/boss/custom/numcount/
+&lt;Response [200]&gt;
+{'data': {'today': 0, 'yesterday': 0, 'mouth': 3, 'all': 100, 'cus_pay': [{'name': '&lt;2万元', 'count': 85, 'percent': 100}, {'name': '2-5万元', 'count': 6, 'percent': 7}, {'name': '5-10万元', 'count': 5, 'percent': 5}, {'name': '10-15万元', 'count': 2, 'percent': 2}, {'name': '≥15万元', 'count': 2, 'percent': 2}]}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Reduce</td>
+    <td>减产概率</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.42秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c7',1)" class="detail" id='c7'>详细</a></td>
+</tr>
+
+    <tr id='pt7_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_reduce</div></td>
+        <td style="vertical-align: middle">减产概率</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt7_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt7_1'>通过</button>
+        <div id='div_pt7_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt7_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt7_1'>通过</button>
+        <div id='div_pt7_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt7_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4Nn0.txJqbeGOg6_3NztmMwK-Q0MjMAh3-SJr-dFfV84X2p4
+https://pbsapi.aikenong.com.cn/boss/yield/reduce
+&lt;Response [200]&gt;
+{'data': [{'reduce_rate': 11.87, 'var_name': '玉米', 'var_code': '01'}, {'reduce_rate': 10.58, 'var_name': '水稻', 'var_code': '02'}, {'reduce_rate': 22.99, 'var_name': '棉花', 'var_code': '03'}], 'httpCode': 200, 'message': '有数据', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Salerank</td>
+    <td>业绩榜</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.01秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c8',1)" class="detail" id='c8'>详细</a></td>
+</tr>
+
+    <tr id='et8_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test09_salerank</div></td>
+        <td style="vertical-align: middle">业绩榜</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et8_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et8_1'>错误</button>
+        <div id='div_et8_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et8_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et8_1'>错误</button>
+        <div id='div_et8_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et8_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'salerank '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_salerank.py", line 18, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'salerank ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'salerank ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Weather</td>
+    <td>天气预报</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c9',1)" class="detail" id='c9'>详细</a></td>
+</tr>
+
+    <tr id='et9_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_weather</div></td>
+        <td style="vertical-align: middle">天气预报</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et9_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et9_1'>错误</button>
+        <div id='div_et9_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et9_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et9_1'>错误</button>
+        <div id='div_et9_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et9_1: Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_weather.py", line 18, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'weather')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 799, in get
+    return self._interpolation.before_get(self, section, option, value,
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 395, in before_get
+    self._interpolate_some(parser, option, L, value, section, defaults, 1)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 442, in _interpolate_some
+    raise InterpolationSyntaxError(
+configparser.InterpolationSyntaxError: '%' must be followed by '%' or '(', found: '%E9%BB%91%E9%BE%99%E6%B1%9F%E7%9C%81&amp;city=%E5%A4%A7%E5%BA%86%E5%B8%82&amp;county=%E9%BE%99%E5%87%A4%E5%8C%BA'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_CustomerCount</td>
+    <td>客户统计</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c10',1)" class="detail" id='c10'>详细</a></td>
+</tr>
+
+    <tr id='et10_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test05_customercount</div></td>
+        <td style="vertical-align: middle">客户统计</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et10_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et10_1'>错误</button>
+        <div id='div_et10_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et10_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et10_1'>错误</button>
+        <div id='div_et10_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et10_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'customercount '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_02_customer_customercount.py", line 17, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'customercount ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'customercount ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_CustomerList</td>
+    <td>客户列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.01秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c11',1)" class="detail" id='c11'>详细</a></td>
+</tr>
+
+    <tr id='et11_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_customerlist</div></td>
+        <td style="vertical-align: middle">客户列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et11_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et11_1'>错误</button>
+        <div id='div_et11_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et11_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et11_1'>错误</button>
+        <div id='div_et11_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et11_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'customerlist  '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_02_customer_customerlist.py", line 18, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'customerlist  ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'customerlist  ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_EmpList</td>
+    <td>员工列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c12',1)" class="detail" id='c12'>详细</a></td>
+</tr>
+
+    <tr id='et12_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_emplist</div></td>
+        <td style="vertical-align: middle">员工列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et12_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et12_1'>错误</button>
+        <div id='div_et12_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et12_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et12_1'>错误</button>
+        <div id='div_et12_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et12_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'emplist '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_02_customer_emplist.py", line 20, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'emplist ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'emplist ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_CropList</td>
+    <td>作物列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.34秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c13',1)" class="detail" id='c13'>详细</a></td>
+</tr>
+
+    <tr id='pt13_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test05_crop_list</div></td>
+        <td style="vertical-align: middle">作物列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt13_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt13_1'>通过</button>
+        <div id='div_pt13_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt13_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt13_1'>通过</button>
+        <div id='div_pt13_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt13_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4N30.ENPk4MFwxLjH2jOTDJaytRCygao6lsJ6Ft-5g5nj97M
+https://pbsapi.aikenong.com.cn/boss/lands/filter/crop_list/
+&lt;Response [200]&gt;
+{'data': [{'varCode': '01', 'varName': '玉米'}, {'varCode': '02', 'varName': '水稻'}, {'varCode': '04', 'varName': '小麦'}, {'varCode': '03', 'varName': '棉花'}, {'varCode': '05', 'varName': '大豆'}, {'varCode': '06', 'varName': '马铃薯'}, {'varCode': '07', 'varName': '苹果'}, {'varCode': '08', 'varName': '番茄'}, {'varCode': '09', 'varName': '烟草'}, {'varCode': '10', 'varName': '桃子'}], 'httpCode': 200, 'message': '作物类型', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_LandsInfo</td>
+    <td>地块信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.38秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c14',1)" class="detail" id='c14'>详细</a></td>
+</tr>
+
+    <tr id='pt14_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_landsinfo</div></td>
+        <td style="vertical-align: middle">地块信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt14_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt14_1'>通过</button>
+        <div id='div_pt14_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt14_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt14_1'>通过</button>
+        <div id='div_pt14_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt14_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4N30.ENPk4MFwxLjH2jOTDJaytRCygao6lsJ6Ft-5g5nj97M
+https://pbsapi.aikenong.com.cn/boss/scattergram/lands/?dtype=custom
+&lt;Response [200]&gt;
+{'data': [{'county': '三河市', 'count': '1个', 'location': [116.989, 39.9907], 'townships': [{'county': '三河市农业高新技术园区', 'count': '1个', 'location': [116.989, 39.9907], 'totalarea': ''}], 'totalarea': ''}, {'county': '丰台区', 'count': '6个', 'location': [116.361, 39.8178], 'townships': [{'county': '南苑乡', 'count': '4个', 'location': [116.361, 39.8178], 'totalarea': ''}, {'county': '吴家场路', 'count': '1个', 'location': [116.308, 39.894], 'totalarea': ''}, {'county': '新宫(地铁站)', 'count': '1个', 'location': [116.366, 39.8126], 'totalarea': ''}], 'totalarea': ''}, {'county': '义县', 'count': '2个', 'location': [121.147, 41.4766], 'townships': [{'county': '前杨镇', 'count': '1个', 'location': [121.147, 41.4766], 'totalarea': ''}, {'county': '大榆树堡镇', 'count': '1个', 'location': [121.585, 41.4809], 'totalarea': ''}], 'totalarea': ''}, {'county': '二七区', 'count': '1个', 'location': [113.662, 34.7458], 'townships': [{'county': '一马路街道', 'count': '1个', 'location': [113.662, 34.7458], 'totalarea': ''}], 'totalarea': ''}, {'county': '五常市', 'count': '24个', 'location': [127.168, 44.932], 'townships': [{'county': '五常市', 'count': '2个', 'location': [127.168, 44.932], 'totalarea': ''}, {'county': '五常镇', 'count': '19个', 'location': [127.2, 44.9358], 'totalarea': ''}, {'county': '天越湾四季花园酒店', 'count': '1个', 'location': [127.178, 44.9342], 'totalarea': ''}, {'county': '常堡乡', 'count': '1个', 'location': [127.197, 44.96], 'totalarea': ''}, {'county': '福熙公馆', 'count': '1个', 'location': [127.174, 44.9369], 'totalarea': ''}], 'totalarea': ''}, {'county': '南关区', 'count': '10个', 'location': [125.327, 43.8276], 'townships': [{'county': None, 'count': '3个', 'location': [125.327, 43.8276], 'totalarea': ''}, {'county': '明珠街道', 'count': '7个', 'location': [125.327, 43.8276], 'totalarea': ''}], 'totalarea': ''}, {'county': '南岗区', 'count': '1个', 'location': [126.627, 45.7196], 'townships': [{'county': '和兴路街道', 'count': '1个', 'location': [126.627, 45.7196], 'totalarea': ''}], 'totalarea': ''}, {'county': '双城区', 'count': '1个', 'location': [125.905, 45.2859], 'townships': [{'county': '韩甸镇', 'count': '1个', 'location': [125.905, 45.2859], 'totalarea': ''}], 'totalarea': ''}, {'county': '唐县', 'count': '1个', 'location': [114.842, 38.8848], 'townships': [{'county': '白合镇', 'count': '1个', 'location': [114.842, 38.8848], 'totalarea': ''}], 'totalarea': ''}, {'county': '大兴区', 'count': '4个', 'location': [116.338, 39.7378], 'townships': [{'county': '兴丰街道', 'count': '1个', 'location': [116.338, 39.7378], 'totalarea': ''}, {'county': '富强路', 'count': '1个', 'location': [116.338, 39.7376], 'totalarea': ''}, {'county': '榆垡镇', 'count': '1个', 'location': [116.322, 39.5208], 'totalarea': ''}, {'county': '魏善庄镇', 'count': '1个', 'location': [116.415, 39.6315], 'totalarea': ''}], 'totalarea': ''}, {'county': '太康县', 'count': '9个', 'location': [115.006, 34.1973], 'townships': [{'county': '小吴', 'count': '1个', 'location': [115.006, 34.1973], 'totalarea': ''}, {'county': '毛庄镇', 'count': '8个', 'location': [114.83, 34.0636], 'totalarea': ''}], 'totalarea': ''}, {'county': '宁江区', 'count': '1个', 'location': [124.926, 45.2807], 'townships': [{'county': '大洼镇', 'count': '1个', 'location': [124.926, 45.2807], 'totalarea': ''}], 'totalarea': ''}, {'county': '宽城区', 'count': '1个', 'location': [125.311, 43.9467], 'townships': [{'county': '塞纳阳光北区A19号楼', 'count': '1个', 'location': [125.311, 43.9467], 'totalarea': ''}], 'totalarea': ''}, {'county': '富锦市', 'count': '1个', 'location': [132.075, 47.2389], 'townships': [{'county': '城关社区建设委员会', 'count': '1个', 'location': [132.075, 47.2389], 'totalarea': ''}], 'totalarea': ''}, {'county': '寿光市', 'count': '1个', 'location': [118.755, 36.8893], 'townships': [{'county': '圣城街道', 'count': '1个', 'location': [118.755, 36.8893], 'totalarea': ''}], 'totalarea': ''}, {'county': '房山区', 'count': '2个', 'location': [116.127, 39.709], 'townships': [{'county': '阎村镇', 'count': '1个', 'location': [116.127, 39.709], 'totalarea': ''}, {'county': '青龙湖镇', 'count': '1个', 'location': [116.028, 39.8067], 'totalarea': ''}], 'totalarea': ''}, {'county': '昌平区', 'count': '1个', 'location': [116.361, 40.3349], 'townships': [{'county': '延寿镇', 'count': '1个', 'location': [116.361, 40.3349], 'totalarea': ''}], 'totalarea': ''}, {'county': '朝阳区', 'count': '10个', 'location': [116.491, 39.8975], 'townships': [{'county': '南磨房镇', 'count': '8个', 'location': [116.491, 39.8975], 'totalarea': ''}, {'county': '王四营镇', 'count': '1个', 'location': [116.51, 39.8839], 'totalarea': ''}, {'county': '金长安大厦C座', 'count': '1个', 'location': [116.491, 39.8973], 'totalarea': ''}], 'totalarea': ''}, {'county': '本溪满族自治县', 'count': '1个', 'location': [123.88, 41.5097], 'townships': [{'county': '高官镇', 'count': '1个', 'location': [123.88, 41.5097], 'totalarea': ''}], 'totalarea': ''}, {'county': '松北区', 'count': '1个', 'location': [126.546, 45.8239], 'townships': [{'county': '松北街道', 'count': '1个', 'location': [126.546, 45.8239], 'totalarea': ''}], 'totalarea': ''}, {'county': '洮北区', 'count': '1个', 'location': [122.851, 45.6217], 'townships': [{'county': '明仁街道', 'count': '1个', 'location': [122.851, 45.6217], 'totalarea': ''}], 'totalarea': ''}, {'county': '海淀区', 'count': '1个', 'location': [116.305, 39.8931], 'townships': [{'county': '海淀区文正学校', 'count': '1个', 'location': [116.305, 39.8931], 'totalarea': ''}], 'totalarea': ''}, {'county': '涿州市', 'count': '11个', 'location': [116.212, 39.567], 'townships': [{'county': '义和庄镇', 'count': '10个', 'location': [116.212, 39.567], 'totalarea': ''}, {'county': '盛龙国际马会', 'count': '1个', 'location': [116.222, 39.562], 'totalarea': ''}], 'totalarea': ''}, {'county': '献县', 'count': '1个', 'location': [116.455, 38.272], 'townships': [{'county': '韩村镇', 'count': '1个', 'location': [116.455, 38.272], 'totalarea': ''}], 'totalarea': ''}, {'county': '翁牛特旗', 'count': '1个', 'location': [120.296, 43.0108], 'townships': [{'county': '白音套海苏木乡', 'count': '1个', 'location': [120.296, 43.0108], 'totalarea': ''}], 'totalarea': ''}, {'county': '遵化市', 'count': '1个', 'location': [117.972, 40.1951], 'townships': [{'county': '遵化镇', 'count': '1个', 'location': [117.972, 40.1951], 'totalarea': ''}], 'totalarea': ''}, {'county': '郊区', 'count': '1个', 'location': [130.265, 46.8341], 'townships': [{'county': '莲江口镇', 'count': '1个', 'location': [130.265, 46.8341], 'totalarea': ''}], 'totalarea': ''}, {'county': '金乡县', 'count': '1个', 'location': [116.256, 35.1778], 'townships': [{'county': '羊山镇', 'count': '1个', 'location': [116.256, 35.1778], 'totalarea': ''}], 'totalarea': ''}, {'county': '雁塔区', 'count': '1个', 'location': [108.901, 34.2157], 'townships': [{'county': '丈八沟街道', 'count': '1个', 'location': [108.901, 34.2157], 'totalarea': ''}], 'totalarea': ''}, {'county': '青州市', 'count': '1个', 'location': [118.626, 36.872], 'townships': [{'county': '何官镇', 'count': '1个', 'location': [118.626, 36.872], 'totalarea': ''}], 'totalarea': ''}], 'httpCode': 200, 'message': '客户地图列表', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_LandCount</td>
+    <td>地块总览</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.38秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c15',1)" class="detail" id='c15'>详细</a></td>
+</tr>
+
+    <tr id='pt15_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_landcount</div></td>
+        <td style="vertical-align: middle">地块总览</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt15_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt15_1'>通过</button>
+        <div id='div_pt15_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt15_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt15_1'>通过</button>
+        <div id='div_pt15_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt15_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4N30.ENPk4MFwxLjH2jOTDJaytRCygao6lsJ6Ft-5g5nj97M
+https://pbsapi.aikenong.com.cn/boss/emp/landcount/
+&lt;Response [200]&gt;
+{'data': {'tnum': 3, 'tmu': 1.2, 'ynum': 0, 'ymu': 0, 'mnum': 12, 'mmu': 53.5, 'all': 139, 'amu': 19858.0, 'bad_sum': 44.9, 'bad_count': 1, 'per': 0.0072}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_LandsNum</td>
+    <td>地块统计</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.47秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c16',1)" class="detail" id='c16'>详细</a></td>
+</tr>
+
+    <tr id='pt16_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test06_landsnum</div></td>
+        <td style="vertical-align: middle">地块统计</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt16_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt16_1'>通过</button>
+        <div id='div_pt16_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt16_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt16_1'>通过</button>
+        <div id='div_pt16_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt16_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4OH0.jPKo8frSFsDM_k5ed6LqyhUrwBaH1GYl6uer-UddveQ
+https://pbsapi.aikenong.com.cn/boss/lands/filter/count_list/?land_name=&amp;page=1&amp;size=12&amp;order_class=&amp;cusId=&amp;empId=&amp;landAreas=&amp;cropCode=&amp;riskCode=&amp;userType=
+&lt;Response [200]&gt;
+{'data': {'land_count': {'land_num': '138块', 'mu_all': '297079.6亩'}, 'crop_land': {'land_num': '60块', 'mu_all': '112522.9亩'}, 'uncrop_land': {'land_num': '78块', 'mu_all': '184556.7亩'}, 'risk_land': {'land_num': '1块', 'mu_all': '673.5亩'}}, 'httpCode': 200, 'message': '地块合计数据', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Goods</td>
+    <td>农资总览</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.35秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c17',1)" class="detail" id='c17'>详细</a></td>
+</tr>
+
+    <tr id='pt17_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_goods</div></td>
+        <td style="vertical-align: middle">农资总览</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt17_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt17_1'>通过</button>
+        <div id='div_pt17_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt17_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt17_1'>通过</button>
+        <div id='div_pt17_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt17_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4OH0.jPKo8frSFsDM_k5ed6LqyhUrwBaH1GYl6uer-UddveQ
+https://pbsapi.aikenong.com.cn/boss/goods/105710052/
+&lt;Response [200]&gt;
+{'data': {'allcout': 29, 'sale': 27, 'saleout': 2, 'warncount': 2}, 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_GoodsType</td>
+    <td>农资类型</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.35秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c18',1)" class="detail" id='c18'>详细</a></td>
+</tr>
+
+    <tr id='pt18_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_goodstype</div></td>
+        <td style="vertical-align: middle">农资总览</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt18_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt18_1'>通过</button>
+        <div id='div_pt18_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt18_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt18_1'>通过</button>
+        <div id='div_pt18_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt18_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4OH0.jPKo8frSFsDM_k5ed6LqyhUrwBaH1GYl6uer-UddveQ
+https://pbsapi.aikenong.com.cn/boss/goods/typelist/
+&lt;Response [200]&gt;
+{'data': [{'clscode': 'SEED', 'clsname': '种子'}, {'clscode': 'FERT', 'clsname': '化肥'}, {'clscode': 'DRUG', 'clsname': '农药'}, {'clscode': 'OTHER', 'clsname': '其它'}], 'httpCode': 200, 'message': '', 'total_page': '', 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_GoodsList</td>
+    <td>农资列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.35秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c19',1)" class="detail" id='c19'>详细</a></td>
+</tr>
+
+    <tr id='pt19_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test04_goodslist</div></td>
+        <td style="vertical-align: middle">农资列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt19_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt19_1'>通过</button>
+        <div id='div_pt19_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt19_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt19_1'>通过</button>
+        <div id='div_pt19_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt19_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4OX0.0ZEG00vKtDxqayPRxFjL6uREiG-WT87r8mriXb4MvHg
+https://pbsapi.aikenong.com.cn/boss/goods/105710052/list/?page=1&amp;size=10&amp;curxname=&amp;clscode=&amp;clscode=&amp;orderby=
+&lt;Response [200]&gt;
+{'data': [{'id': 346, 'clsCode': 'DRUG', 'clsName': '农药', 'goodsName': '测试农资', 'goodsNum': 11634, 'unitAmount': '1', 'unitName': '升', 'unitPkg': '瓶', 'perPrice': 9.5, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/e763dbda-9f31-11ea-a174-fa163e3bfb8d.png'}, {'id': 334, 'clsCode': 'OTHER', 'clsName': '其它', 'goodsName': '一个半挖掘机', 'goodsNum': 11622, 'unitAmount': '1.5', 'unitName': '个', 'unitPkg': '件', 'perPrice': 1500.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/de7b3b44-9f31-11ea-98b5-fa163e3bfb8d.png'}, {'id': 235, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '高产003', 'goodsNum': 11500, 'unitAmount': '1000', 'unitName': '粒', 'unitPkg': '袋', 'perPrice': 50.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/24cb7100-9f31-11ea-869a-fa163e3bfb8d.png'}, {'id': 234, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '高产玉米002', 'goodsNum': 11499, 'unitAmount': '1000', 'unitName': '粒', 'unitPkg': '袋', 'perPrice': 50.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/32e0a918-9f31-11ea-8b98-fa163e3bfb8d.png'}, {'id': 225, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': 'mc1002', 'goodsNum': 11490, 'unitAmount': '45000', 'unitName': '粒', 'unitPkg': '袋', 'perPrice': 800.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/86268aa6-6f35-11ea-8c07-fa163e3bfb8d.jpg'}, {'id': 187, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '大麦558', 'goodsNum': 11452, 'unitAmount': '200', 'unitName': '斤', 'unitPkg': '袋', 'perPrice': 200.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/3fabdf46-9f31-11ea-98b5-fa163e3bfb8d.png'}, {'id': 186, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '大麦', 'goodsNum': 11451, 'unitAmount': '100', 'unitName': '粒', 'unitPkg': '袋', 'perPrice': 1.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/4ed4502a-9f31-11ea-869a-fa163e3bfb8d.png'}, {'id': 185, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '大豆266', 'goodsNum': 11450, 'unitAmount': '10', 'unitName': '粒', 'unitPkg': '袋', 'perPrice': 1.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/c4403bf8-9f31-11ea-8b98-fa163e3bfb8d.jpg'}, {'id': 182, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '12323', 'goodsNum': 11447, 'unitAmount': '123', 'unitName': '斤', 'unitPkg': '袋', 'perPrice': 23123.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/986eeecc-6dc0-11ea-ba28-fa163e3bfb8d.jpeg'}, {'id': 171, 'clsCode': 'SEED', 'clsName': '种子', 'goodsName': '大豆m175', 'goodsNum': 11436, 'unitAmount': '1500', 'unitName': '粒', 'unitPkg': '袋', 'perPrice': 100.0, 'stockCount': None, 'warnCount': None, 'saleFlag': '1', 'picPath': '/static/media/goods/ceb47c34-9f31-11ea-a174-fa163e3bfb8d.jpg'}], 'httpCode': 200, 'message': '', 'total_page': 29, 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Employee</td>
+    <td>员工列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.34秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c20',1)" class="detail" id='c20'>详细</a></td>
+</tr>
+
+    <tr id='pt20_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test01_employee</div></td>
+        <td style="vertical-align: middle">员工列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt20_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt20_1'>通过</button>
+        <div id='div_pt20_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt20_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt20_1'>通过</button>
+        <div id='div_pt20_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt20_1: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODg4OX0.0ZEG00vKtDxqayPRxFjL6uREiG-WT87r8mriXb4MvHg
+https://pbsapi.aikenong.com.cn/boss/emp/list/105710052/?page=1&amp;size=10
+&lt;Response [200]&gt;
+{'data': [{'empid': 615, 'empName': '李李', 'empMobile': '13156181780', 'jobType': '1', 'status': '1', 'initPassword': '777777a', 'entryTime': '2020-04-01'}, {'empid': 540, 'empName': '张服务', 'empMobile': '18899990006', 'jobType': '3', 'status': '1', 'initPassword': 'akn2019666', 'entryTime': '2020-05-18'}, {'empid': 442, 'empName': '高高高', 'empMobile': '15810037123', 'jobType': '1', 'status': '1', 'initPassword': '123456', 'entryTime': '2020-04-17'}, {'empid': 349, 'empName': '刘明', 'empMobile': '18645508304', 'jobType': '1', 'status': '1', 'initPassword': 'woaini1314', 'entryTime': '2020-03-26'}, {'empid': 348, 'empName': '刘明', 'empMobile': '13144524003', 'jobType': '1', 'status': '1', 'initPassword': 'akn2019666', 'entryTime': '2020-03-26'}, {'empid': 233, 'empName': 'ql', 'empMobile': '13001268888', 'jobType': '1', 'status': '1', 'initPassword': 'akn2019666', 'entryTime': '2020-03-05'}, {'empid': 224, 'empName': '01业务员', 'empMobile': '13998709999', 'jobType': '1', 'status': '1', 'initPassword': 'akn2019666', 'entryTime': '2020-02-18'}, {'empid': 195, 'empName': '刘秀', 'empMobile': '18222863291', 'jobType': '1', 'status': '2', 'initPassword': 'akn2019666', 'entryTime': '2020-01-01'}, {'empid': 194, 'empName': '刘秀', 'empMobile': '18222863291', 'jobType': '1', 'status': '2', 'initPassword': 'akn2019666', 'entryTime': '2020-01-01'}, {'empid': 186, 'empName': '刘秀', 'empMobile': '18222863291', 'jobType': '1', 'status': '2', 'initPassword': 'akn2019666', 'entryTime': '2020-02-04'}], 'httpCode': 200, 'message': '', 'total_page': 78, 'count': ''}
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr id='total_row' class="text-center active">
+    <td colspan='2'>总计</td>
+    <td>22</td>
+    <td>17</td>
+    <td>0</td>
+    <td>5</td>
+    <td>5.84秒</td>
+    <td>通过率：77.27%</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+    <div id="toTop" style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer; display: none">
+    <a><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
+    </span></a></div>
+    
+</body>
+</html>

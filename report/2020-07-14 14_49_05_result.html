@@ -1,0 +1,1817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>爱耕耘商务版接口测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 1.2.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    
+<style type="text/css" media="screen">
+body        { font-family: Microsoft YaHei;padding: 20px; font-size: 100%; }
+table       { font-size: 100%; }
+.table tbody tr td{
+            vertical-align: middle;
+        }
+/* -- heading ---------------------------------------------------------------------- */
+.heading .description, .attribute {
+    clear: both;
+}
+/* --- 失败和错误合集样式 -- Gelomen --- */
+.failCollection, .errorCollection {
+    width: 100px;
+    float: left;
+}
+#failCaseOl li {
+    color: red
+}
+#errorCaseOl li {
+    color: orange
+}
+/* --- 打开截图特效样式 -- Gelomen --- */
+.data-img{
+    cursor:pointer
+}
+.pic_looper{
+    width:100%;
+    height:100%;
+    position: fixed;
+    left: 0;
+    top:0;
+    opacity: 0.6;
+    background: #000;
+    display: none;
+    z-index: 100;
+}
+.pic_show{
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+.pic_box{
+    padding:10px;
+    width:90%;
+    height:90%;
+    margin:40px auto;
+    text-align: center;
+    overflow: hidden;
+}
+.pic_box img{
+    width: auto;
+    height: 100%;
+    -moz-box-shadow: 0px 0px 20px 0px #000;
+    -webkit-box-shadow: 0px 0px 20px 0px #000;
+    box-shadow: 0px 0px 20px 0px #000;
+}
+/* --- 饼状图div样式 -- Gelomen --- */
+#container {
+    width: 450px;
+    height: 300px;
+    float: left;
+}
+/* -- report ------------------------------------------------------------------------ */
+#total_row  { font-weight: bold; }
+.passCase   { color: #5cb85c; }
+.failCase   { color: #d9534f; font-weight: bold; }
+.errorCase  { color: #f0ad4e; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+.screenshot:link { text-decoration: none;color: deeppink; }
+.screenshot:visited { text-decoration: none;color: deeppink; }
+.screenshot:hover { text-decoration: none;color: darkcyan; }
+.screenshot:active { text-decoration: none;color: deeppink; }
+</style>
+
+</head>
+<body >
+<script language="javascript" type="text/javascript">
+    $(function(){
+        // 修改 失败 和 错误 用例里对应按钮的颜色ClassName为动态加载 -- Gelomen
+    	$("button").each(function () {
+    	    var text = $(this).text();
+    	    if(text == "失败"){
+    	        $(this).addClass("btn-danger")
+            }else if(text == "错误") {
+                $(this).addClass("btn-warning")
+            }
+        });
+        // 给失败和错误合集加样式 -- Gelomen
+        var p_attribute = $("p.attribute");
+        p_attribute.eq(4).addClass("failCollection");
+        p_attribute.eq(5).addClass("errorCollection");
+        // 打开截图，放大，点击任何位置可以关闭图片  -- Gelomen
+        $(".screenshot").click(function(){
+            var img = $(this).attr("img");
+            $('.pic_show img').attr('src', img);
+            $('.pic_looper').fadeIn(200);
+            $('.pic_show').fadeIn(200);
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px")
+        });
+        $('.pic_looper, .pic_show').click(function(){
+            $('.pic_looper').fadeOut(200);
+            $('.pic_show').fadeOut(200)
+        });
+        var browserWidth = $(window).width();
+        var margin_left = browserWidth/2 - 450;
+        if(margin_left <= 240){
+            $("#container").css("margin", "auto");
+        }else {
+            $("#container").css("margin-left", margin_left + "px");
+        }
+        $(window).resize(function(){
+            // 改变窗口大小时，自动改变图片与顶部的距离  -- Gelomen
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px");
+            // 改变窗口大小时，自动改变饼图的边距  -- Gelomen
+            var browserWidth = $(window).width();
+            var margin_left = browserWidth/2 - 450;
+            if(margin_left <= 240){
+                $("#container").css("margin", "auto");
+            }else {
+                $("#container").css("margin-left", margin_left + "px");
+            }
+        });
+        // 距离顶部超过浏览器窗口一屏时，回到顶部按钮才出现  -- Gelomen
+        $(window).scroll(function(){
+            var browserHeight = $(window).height();
+            var top = $(window).scrollTop();
+            if(top >= browserHeight){
+                $("#toTop").css("display", "block")
+            }else {
+                $("#toTop").css("display", "none")
+            }
+        })
+        // 增加回到顶部过程的动画，以看上去不会那么生硬  -- Gelomen
+        $("#toTop").click(function() {
+            $("html,body").animate({"scrollTop":0}, 700)
+        })
+        // 增加饼状图  -- Gelomen
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                spacing : [0, 0, 0, 0]
+            },
+            credits: {
+                enabled: false
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: false
+                }
+            },
+            title: {
+                floating:true,
+                text: '测试结果占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    colors: ['#81ca9d', '#f16d7e', '#fdc68c'],
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    point: {
+                        events: {
+                            mouseOver: function(e) {  // 鼠标滑过时动态更新标题
+                                chart.setTitle({
+                                    text: e.target.name+ '\t'+ e.target.y + ' 个'
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '80%',
+                name: '比例',
+                data: [
+                    ['通过', 3],
+                    {
+                        name: '失败',
+                        y: 0,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['错误', 19]
+                ]
+            }]
+        }, function(c) {
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                titleHeight = parseInt(c.title.styles.fontSize);
+            c.setTitle({
+                y:centerY + titleHeight/2
+            });
+            chart = c;
+        });
+        // 查看 失败 和 错误 合集链接文字切换  -- Gelomen
+        $(".showDetail").click(function () {
+            if($(this).html() == "点击查看"){
+                $(this).html("点击收起")
+            }else {
+                $(this).html("点击查看")
+            }
+        })
+    });
+output_list = Array();
+/*level 调整增加只显示通过用例的分类 --Findyou / 修复筛选显示bug --Gelomen
+0:Summary //all hiddenRow
+1:Failed  //pt&et hiddenRow, ft none
+2:Pass    //pt none, ft&et hiddenRow
+3:Error   //pt&ft hiddenRow, et none
+4:All     //all none
+*/
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level == 2 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level == 1 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'et') {
+            if (level == 1 || level == 0 || level == 2) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+    }
+    //加入【详细】切换文字变化 --Findyou
+    detail_class=document.getElementsByClassName('detail');
+	//console.log(detail_class.length)
+	if (level == 3) {
+		for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="收起"
+		}
+	}
+	else{
+			for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="详细"
+		}
+	}
+}
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        //ID修改 点 为 下划线 -Findyou
+        tid0 = 't' + cid.substr(1) + '_' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'e' + tid0;
+                tr = document.getElementById(tid);
+            }
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        //修改点击无法收起的BUG，加入【详细】切换文字变化 --Findyou
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+            document.getElementById(cid).innerText = "详细"
+        }
+        else {
+            document.getElementById(tid).className = '';
+            document.getElementById(cid).innerText = "收起"
+        }
+    }
+}
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+</script>
+<div class='pic_looper'></div> <div class='pic_show'><div class='pic_box'><img src=''/></div> </div>
+<div class='heading'>
+<div style="width: 650px; float: left;">
+    <h1 style="font-family: Microsoft YaHei">爱耕耘商务版接口测试报告</h1>
+    <p class='attribute'><strong>测试人员 : </strong> 李德涛</p>
+<p class='attribute'><strong>开始时间 : </strong> 2020-07-14 14:49:05</p>
+<p class='attribute'><strong>合计耗时 : </strong> 0:00:01.860240</p>
+<p class='attribute'><strong>测试结果 : </strong> 共 22，通过 3，错误 19，通过率 = 13.64%</p>
+<p class='attribute'><strong>失败用例合集 : </strong> <ol style='float: left;'>无</ol></p>
+<p class='attribute'><strong>错误用例合集 : </strong> <div class='panel-default' style='float: left;'><a class='showDetail' data-toggle='collapse' href='#errorCaseOl' style='text-decoration: none;'>点击查看</a></div><ol id='errorCaseOl' class='collapse' style='float: left;'><li>test01_company (test_01_index_company.Test_Company)</li><li>test01_cuscount (test_01_index_cuscount.Test_Cuscount)</li><li>test01_info (test_01_index_info.Test_Info)</li><li>test01_monthsale (test_01_index_monthsale.Test_MonthSale)</li><li>test08_numcount (test_01_index_numcount.Test_NumCount)</li><li>test01_reduce (test_01_index_reduce.Test_Reduce)</li><li>test09_salerank (test_01_index_salerank.Test_Salerank)</li><li>test01_weather (test_01_index_weather.Test_Weather)</li><li>test05_customercount (test_02_customer_customercount.Test_CustomerCount)</li><li>test01_customerlist (test_02_customer_customerlist.Test_CustomerList)</li><li>test01_emplist (test_02_customer_emplist.Test_EmpList)</li><li>test05_crop_list (test_03_lands_croplist.Test_CropList)</li><li>test01_landsinfo (test_03_lands_info.Test_LandsInfo)</li><li>test01_landcount (test_03_lands_landcount.Test_LandCount)</li><li>test06_landsnum (test_03_lands_landsnum.Test_LandsNum)</li><li>test01_goods (test_04_goods_count.Test_Goods)</li><li>test01_goodstype (test_04_goods_goodstype.Test_GoodsType)</li><li>test04_goodslist (test_04_goods_list.Test_GoodsList)</li><li>test01_employee (test_05_emp_list.Test_Employee)</li></ol></p>
+
+    <p class='description'>测试详情如下：description</p>
+</div>
+<div id="container"></div>
+</div>
+
+
+<div style="width: 500px; clear: both;">
+<p id='show_detail_line'>
+<a class="btn btn-primary" href='javascript:showCase(0)'>概要{ 13.64% }</a>
+<a class="btn btn-success" href='javascript:showCase(2)'>通过{ 3 }</a>
+<a class="btn btn-danger" href='javascript:showCase(1)'>失败{ 0 }</a>
+<a class="btn btn-warning" href='javascript:showCase(3)'>错误{ 19 }</a>
+<a class="btn btn-info" href='javascript:showCase(4)'>所有{ 22 }</a>
+</p>
+</div>
+<table id='result_table' class="table table-condensed table-bordered table-hover">
+<colgroup>
+<col align='left' style="width: 300px;"/>
+<col align='right' style="width: 300px;"/>
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' style="width: 200px;"/>
+</colgroup>
+<tr id='header_row' class="text-center success" style="font-weight: bold;font-size: 14px;">
+    <td>用例集/测试用例</td>
+    <td>说明</td>
+    <td>总计</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>耗时</td>
+    <td>详细</td>
+</tr>
+
+<tr class='errorClass warning'>
+    <td>Test_Company</td>
+    <td>公司信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.23秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c1',1)" class="detail" id='c1'>详细</a></td>
+</tr>
+
+    <tr id='et1_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_company</div></td>
+        <td style="vertical-align: middle">公司信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_1'>错误</button>
+        <div id='div_et1_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_1'>错误</button>
+        <div id='div_et1_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_company.py", line 21, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Cuscount</td>
+    <td>客户排行榜</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.07秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c2',1)" class="detail" id='c2'>详细</a></td>
+</tr>
+
+    <tr id='et2_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_cuscount</div></td>
+        <td style="vertical-align: middle">客户排行榜</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et2_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et2_1'>错误</button>
+        <div id='div_et2_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et2_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et2_1'>错误</button>
+        <div id='div_et2_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et2_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_cuscount.py", line 21, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Info</td>
+    <td>用户信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.07秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c3',1)" class="detail" id='c3'>详细</a></td>
+</tr>
+
+    <tr id='et3_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_info</div></td>
+        <td style="vertical-align: middle">用户信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et3_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et3_1'>错误</button>
+        <div id='div_et3_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et3_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et3_1'>错误</button>
+        <div id='div_et3_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et3_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_info.py", line 22, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='passClass warning'>
+    <td>Test_Login</td>
+    <td>登录功能</td>
+    <td class="text-center">3</td>
+    <td class="text-center">3</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0.71秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c4',3)" class="detail" id='c4'>详细</a></td>
+</tr>
+
+    <tr id='pt4_1' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_1___13611112222____akn2019666____httpCode___200_</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_1'>通过</button>
+        <div id='div_pt4_1' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_1: https://pbsapi.aikenong.com.cn/boss/login/
+测试开始！
+200
+{'data': {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODgzMn0.LzKSGWEWWbdMaODfSmPa4IncXiDbCJI7V5BtMFEd8t0', 'user_id': 12340079, 'mobile': '13611112222', 'comp_flag': '', 'main_var_code': None, 'username': '孙文', 'compCode': 105710052, 'compName': '爱科农-001', 'address': [{'id': 43, 'icanId': 12340079, 'province': '黑龙江省', 'city': '大庆市', 'county': '龙凤区', 'township': '开发区黎明街道', 'addressDetail': '黑龙江省大庆市龙凤区开发区黎明街道大庆博物馆', 'longitude': 125.154, 'latitude': 46.5852, 'curFlag': '0'}, {'id': 486, 'icanId': 12340079, 'province': '河北省', 'city': '唐山市', 'county': '路北区', 'township': '果园乡', 'addressDetail': '河北省唐山市路北区果园乡驴肉火烧荷叶饭', 'longitude': 118.099, 'latitude': 39.6411, 'curFlag': '0'}, {'id': 487, 'icanId': 12340079, 'province': '内蒙古自治区', 'city': '锡林郭勒盟', 'county': '锡林浩特市', 'township': '锡林浩特汽车站', 'addressDetail': '致富路与那达慕大街交叉口西南150米锡林浩特汽车站', 'longitude': 116.088, 'latitude': 43.9382, 'curFlag': '0'}, {'id': 526, 'icanId': 12340079, 'province': '黑龙江省', 'city': '绥化市', 'county': '兰西县', 'township': '康荣乡', 'addressDetail': '黑龙江省绥化市兰西县康荣乡哈黑路', 'longitude': 126.262, 'latitude': 46.1988, 'curFlag': '0'}]}, 'httpCode': 200, 'msg': '登录成功'}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt4_2' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_2___13611112222____akn2019666____msg____登录成功__</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_2'>通过</button>
+        <div id='div_pt4_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_2'>通过</button>
+        <div id='div_pt4_2' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_2: https://pbsapi.aikenong.com.cn/boss/login/
+测试开始！
+登录成功
+{'data': {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjM0MDA3OSwidXNlcm5hbWUiOiIxMzYxMTExMjIyMiIsImV4cCI6MTYyNjE1ODgzM30.JGVW_vUgjAagImB3BH0XsjbqP6dl7EZQVIKCTEXWJGE', 'user_id': 12340079, 'mobile': '13611112222', 'comp_flag': '', 'main_var_code': None, 'username': '孙文', 'compCode': 105710052, 'compName': '爱科农-001', 'address': [{'id': 43, 'icanId': 12340079, 'province': '黑龙江省', 'city': '大庆市', 'county': '龙凤区', 'township': '开发区黎明街道', 'addressDetail': '黑龙江省大庆市龙凤区开发区黎明街道大庆博物馆', 'longitude': 125.154, 'latitude': 46.5852, 'curFlag': '0'}, {'id': 486, 'icanId': 12340079, 'province': '河北省', 'city': '唐山市', 'county': '路北区', 'township': '果园乡', 'addressDetail': '河北省唐山市路北区果园乡驴肉火烧荷叶饭', 'longitude': 118.099, 'latitude': 39.6411, 'curFlag': '0'}, {'id': 487, 'icanId': 12340079, 'province': '内蒙古自治区', 'city': '锡林郭勒盟', 'county': '锡林浩特市', 'township': '锡林浩特汽车站', 'addressDetail': '致富路与那达慕大街交叉口西南150米锡林浩特汽车站', 'longitude': 116.088, 'latitude': 43.9382, 'curFlag': '0'}, {'id': 526, 'icanId': 12340079, 'province': '黑龙江省', 'city': '绥化市', 'county': '兰西县', 'township': '康荣乡', 'addressDetail': '黑龙江省绥化市兰西县康荣乡哈黑路', 'longitude': 126.262, 'latitude': 46.1988, 'curFlag': '0'}]}, 'httpCode': 200, 'msg': '登录成功'}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='pt4_3' class='hiddenRow'>
+        <td class='passCase' style="vertical-align: middle"><div class='testcase'>test_login_3___13611112222____2121212____code_____400___</div></td>
+        <td style="vertical-align: middle">登录功能</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_pt4_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_pt4_3'>通过</button>
+        <div id='div_pt4_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_pt4_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_pt4_3'>通过</button>
+        <div id='div_pt4_3' class="collapse in">
+        <pre style="text-align:left">
+        
+pt4_3: https://pbsapi.aikenong.com.cn/boss/login/
+测试开始！
+['400']
+{'msg': ['用户名或密码错误'], 'code': ['400'], 'data': ['None']}
+测试完成！
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='passCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_MonthSale</td>
+    <td>月农资销售额</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.07秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c5',1)" class="detail" id='c5'>详细</a></td>
+</tr>
+
+    <tr id='et5_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_monthsale</div></td>
+        <td style="vertical-align: middle">月农资销售额</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et5_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et5_1'>错误</button>
+        <div id='div_et5_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et5_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et5_1'>错误</button>
+        <div id='div_et5_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et5_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_monthsale.py", line 16, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_NumCount</td>
+    <td>本年客户分析</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.08秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c6',1)" class="detail" id='c6'>详细</a></td>
+</tr>
+
+    <tr id='et6_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test08_numcount</div></td>
+        <td style="vertical-align: middle">本年客户分析</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et6_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et6_1'>错误</button>
+        <div id='div_et6_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et6_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et6_1'>错误</button>
+        <div id='div_et6_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et6_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_numcount.py", line 16, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Reduce</td>
+    <td>减产概率</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.07秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c7',1)" class="detail" id='c7'>详细</a></td>
+</tr>
+
+    <tr id='et7_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_reduce</div></td>
+        <td style="vertical-align: middle">减产概率</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et7_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et7_1'>错误</button>
+        <div id='div_et7_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et7_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et7_1'>错误</button>
+        <div id='div_et7_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et7_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_reduce.py", line 20, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Salerank</td>
+    <td>业绩榜</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c8',1)" class="detail" id='c8'>详细</a></td>
+</tr>
+
+    <tr id='et8_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test09_salerank</div></td>
+        <td style="vertical-align: middle">业绩榜</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et8_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et8_1'>错误</button>
+        <div id='div_et8_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et8_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et8_1'>错误</button>
+        <div id='div_et8_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et8_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'salerank '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_salerank.py", line 18, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'salerank ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'salerank ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Weather</td>
+    <td>天气预报</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c9',1)" class="detail" id='c9'>详细</a></td>
+</tr>
+
+    <tr id='et9_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_weather</div></td>
+        <td style="vertical-align: middle">天气预报</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et9_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et9_1'>错误</button>
+        <div id='div_et9_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et9_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et9_1'>错误</button>
+        <div id='div_et9_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et9_1: Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_01_index_weather.py", line 18, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'weather')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 799, in get
+    return self._interpolation.before_get(self, section, option, value,
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 395, in before_get
+    self._interpolate_some(parser, option, L, value, section, defaults, 1)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 442, in _interpolate_some
+    raise InterpolationSyntaxError(
+configparser.InterpolationSyntaxError: '%' must be followed by '%' or '(', found: '%E9%BB%91%E9%BE%99%E6%B1%9F%E7%9C%81&amp;city=%E5%A4%A7%E5%BA%86%E5%B8%82&amp;county=%E9%BE%99%E5%87%A4%E5%8C%BA'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_CustomerCount</td>
+    <td>客户统计</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c10',1)" class="detail" id='c10'>详细</a></td>
+</tr>
+
+    <tr id='et10_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test05_customercount</div></td>
+        <td style="vertical-align: middle">客户统计</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et10_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et10_1'>错误</button>
+        <div id='div_et10_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et10_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et10_1'>错误</button>
+        <div id='div_et10_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et10_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'customercount '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_02_customer_customercount.py", line 17, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'customercount ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'customercount ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_CustomerList</td>
+    <td>客户列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c11',1)" class="detail" id='c11'>详细</a></td>
+</tr>
+
+    <tr id='et11_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_customerlist</div></td>
+        <td style="vertical-align: middle">客户列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et11_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et11_1'>错误</button>
+        <div id='div_et11_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et11_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et11_1'>错误</button>
+        <div id='div_et11_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et11_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'customerlist  '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_02_customer_customerlist.py", line 18, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'customerlist  ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'customerlist  ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_EmpList</td>
+    <td>员工列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c12',1)" class="detail" id='c12'>详细</a></td>
+</tr>
+
+    <tr id='et12_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_emplist</div></td>
+        <td style="vertical-align: middle">员工列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et12_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et12_1'>错误</button>
+        <div id='div_et12_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et12_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et12_1'>错误</button>
+        <div id='div_et12_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et12_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 789, in get
+    value = d[option]
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 898, in __getitem__
+    return self.__missing__(key)            # support subclasses that define __missing__
+  File "D:\Program Files\Java\Python38\lib\collections\__init__.py", line 890, in __missing__
+    raise KeyError(key)
+KeyError: 'emplist '
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_02_customer_emplist.py", line 20, in setUp
+    self.doc = ReadConfig().get_config_str('HOST_BOSS', 'emplist ')
+  File "E:\Test\iKn_win\oper\read_Config.py", line 16, in get_config_str
+    value = config.get(sections,option)
+  File "D:\Program Files\Java\Python38\lib\configparser.py", line 792, in get
+    raise NoOptionError(option, section)
+configparser.NoOptionError: No option 'emplist ' in section: 'HOST_BOSS'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_CropList</td>
+    <td>作物列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.06秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c13',1)" class="detail" id='c13'>详细</a></td>
+</tr>
+
+    <tr id='et13_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test05_crop_list</div></td>
+        <td style="vertical-align: middle">作物列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et13_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et13_1'>错误</button>
+        <div id='div_et13_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et13_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et13_1'>错误</button>
+        <div id='div_et13_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et13_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_03_lands_croplist.py", line 16, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_LandsInfo</td>
+    <td>地块信息</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.08秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c14',1)" class="detail" id='c14'>详细</a></td>
+</tr>
+
+    <tr id='et14_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_landsinfo</div></td>
+        <td style="vertical-align: middle">地块信息</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et14_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et14_1'>错误</button>
+        <div id='div_et14_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et14_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et14_1'>错误</button>
+        <div id='div_et14_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et14_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_03_lands_info.py", line 20, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_LandCount</td>
+    <td>地块总览</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.06秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c15',1)" class="detail" id='c15'>详细</a></td>
+</tr>
+
+    <tr id='et15_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_landcount</div></td>
+        <td style="vertical-align: middle">地块总览</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et15_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et15_1'>错误</button>
+        <div id='div_et15_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et15_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et15_1'>错误</button>
+        <div id='div_et15_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et15_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_03_lands_landcount.py", line 19, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_LandsNum</td>
+    <td>地块统计</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.08秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c16',1)" class="detail" id='c16'>详细</a></td>
+</tr>
+
+    <tr id='et16_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test06_landsnum</div></td>
+        <td style="vertical-align: middle">地块统计</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et16_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et16_1'>错误</button>
+        <div id='div_et16_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et16_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et16_1'>错误</button>
+        <div id='div_et16_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et16_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_03_lands_landsnum.py", line 19, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Goods</td>
+    <td>农资总览</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.06秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c17',1)" class="detail" id='c17'>详细</a></td>
+</tr>
+
+    <tr id='et17_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_goods</div></td>
+        <td style="vertical-align: middle">农资总览</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et17_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et17_1'>错误</button>
+        <div id='div_et17_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et17_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et17_1'>错误</button>
+        <div id='div_et17_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et17_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_04_goods_count.py", line 20, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_GoodsType</td>
+    <td>农资类型</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.07秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c18',1)" class="detail" id='c18'>详细</a></td>
+</tr>
+
+    <tr id='et18_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_goodstype</div></td>
+        <td style="vertical-align: middle">农资总览</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et18_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et18_1'>错误</button>
+        <div id='div_et18_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et18_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et18_1'>错误</button>
+        <div id='div_et18_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et18_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_04_goods_goodstype.py", line 20, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_GoodsList</td>
+    <td>农资列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.07秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c19',1)" class="detail" id='c19'>详细</a></td>
+</tr>
+
+    <tr id='et19_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test04_goodslist</div></td>
+        <td style="vertical-align: middle">农资列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et19_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et19_1'>错误</button>
+        <div id='div_et19_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et19_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et19_1'>错误</button>
+        <div id='div_et19_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et19_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_04_goods_list.py", line 19, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Employee</td>
+    <td>员工列表</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">1</td>
+    <td class="text-center">0.06秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c20',1)" class="detail" id='c20'>详细</a></td>
+</tr>
+
+    <tr id='et20_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test01_employee</div></td>
+        <td style="vertical-align: middle">员工列表</td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et20_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et20_1'>错误</button>
+        <div id='div_et20_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et20_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et20_1'>错误</button>
+        <div id='div_et20_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et20_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 595, in urlopen
+    self._prepare_proxy(conn)
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 816, in _prepare_proxy
+    conn.connect()
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connection.py", line 319, in connect
+    self.sock = ssl_wrap_socket(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\Program Files\Java\Python38\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\connectionpool.py", line 638, in urlopen
+    retries = retries.increment(method, url, error=e, _pool=self,
+  File "D:\Program Files\Java\Python38\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Test\iKn_win\testcase\interCase_boss_pc\test_05_emp_list.py", line 20, in setUp
+    self.token = base.get_token_akn()
+  File "E:\Test\iKn_win\public\base.py", line 172, in get_token_akn
+    resp = requests.post(url, data=json.dumps(par), headers=headers)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 530, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\sessions.py", line 643, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\Java\Python38\lib\site-packages\requests\adapters.py", line 514, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='pbsapi.aikenong.com.cn', port=443): Max retries exceeded with url: /boss/login/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1108)')))
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr id='total_row' class="text-center active">
+    <td colspan='2'>总计</td>
+    <td>22</td>
+    <td>3</td>
+    <td>0</td>
+    <td>19</td>
+    <td>1.84秒</td>
+    <td>通过率：13.64%</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+    <div id="toTop" style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer; display: none">
+    <a><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
+    </span></a></div>
+    
+</body>
+</html>
